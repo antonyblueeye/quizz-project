@@ -1,0 +1,52 @@
+[
+  {
+    "text": "What is the capital of France?",
+    "options": ["Paris", "Berlin", "Rome", "Madrid"],
+    "answer": "Paris"
+  },
+  {
+    "text": "What is 2 + 2?",
+    "options": ["3", "4", "5", "22"],
+    "answer": "4"
+  },
+  {
+    "text": "Which planet is known as the Red Planet?",
+    "options": ["Earth", "Mars", "Jupiter", "Saturn"],
+    "answer": "Mars"
+  },
+  {
+    "text": "Who wrote \"Hamlet\"?",
+    "options": ["Charles Dickens", "William Shakespeare", "Mark Twain", "Leo Tolstoy"],
+    "answer": "William Shakespeare"
+  },
+  {
+    "text": "What is the chemical symbol for water?",
+    "options": ["H2O", "O2", "CO2", "NaCl"],
+    "answer": "H2O"
+  },
+  {
+    "text": "What year did the first man land on the Moon?",
+    "options": ["1965", "1969", "1972", "1980"],
+    "answer": "1969"
+  },
+  {
+    "text": "What is the largest ocean on Earth?",
+    "options": ["Atlantic", "Indian", "Arctic", "Pacific"],
+    "answer": "Pacific"
+  },
+  {
+    "text": "Who painted the Mona Lisa?",
+    "options": ["Vincent Van Gogh", "Pablo Picasso", "Leonardo da Vinci", "Claude Monet"],
+    "answer": "Leonardo da Vinci"
+  },
+  {
+    "text": "What is the fastest land animal?",
+    "options": ["Cheetah", "Lion", "Horse", "Ostrich"],
+    "answer": "Cheetah"
+  },
+  {
+    "text": "Which language is primarily used for Android app development?",
+    "options": ["Swift", "Kotlin", "JavaScript", "Ruby"],
+    "answer": "Kotlin"
+  }
+]

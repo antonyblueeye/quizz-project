@@ -1,0 +1,182 @@
+function imagePath(round, filename) {
+  return `/quiz/${round.imageFolder}/${filename}`;
+}
+
+function formatQuestion(round, question, questionIndex) {
+  const base = {
+    round: round.id,
+    roundTitle: round.title,
+    type: round.type,
+    questionNumber: questionIndex + 1,
+    totalInRound: round.questions.length,
+  };
+
+  if (round.type === "choice") {
+    return { ...base, text: question.text, options: question.options };
+  }
+
+  if (round.type === "truefalse") {
+    return {
+      ...base,
+      text: question.text,
+      options: ["Правда", "Ложь"],
+    };
+  }
+
+  if (round.type === "logic") {
+    return {
+      ...base,
+      text: question.text,
+      placeholder: question.placeholder || "Ваш ответ",
+    };
+  }
+
+  if (round.type === "movie") {
+    return {
+      ...base,
+      text: "Угадай фильм по кадру",
+      image: imagePath(round, question.image),
+      placeholder: "Название фильма",
+    };
+  }
+
+  if (round.type === "cover") {
+    return {
+      ...base,
+      text: "Назовите группу, которая выпустила этот альбом",
+      image: imagePath(round, question.image),
+      placeholder: "Название группы",
+    };
+  }
+
+  if (round.type === "song") {
+    const folder = round.audioFolder || round.mediaFolder || "round3";
+    return {
+      ...base,
+      text: "Угадайте песню или исполнителя по фрагменту",
+      audio: `/quiz/${folder}/${question.audio}`,
+      placeholder: "Название песни или исполнителя",
+    };
+  }
+
+  if (round.type === "brand") {
+    return {
+      ...base,
+      text: "Угадайте бренд по логотипу",
+      image: imagePath(round, question.image),
+      placeholder: question.placeholder || "Название бренда",
+    };
+  }
+
+  if (round.type === "place") {
+    return {
+      ...base,
+      text: "Угадайте место по фото",
+      image: imagePath(round, question.image),
+      dualInput: true,
+      cityPlaceholder: "Город",
+      countryPlaceholder: "Страна",
+      scoringHint: `Город — ${question.cityPoints ?? 3} б. · Страна — ${question.countryPoints ?? 1} б.`,
+    };
+  }
+
+  if (round.type === "closest") {
+    return {
+      ...base,
+      text: question.text,
+      numeric: true,
+      placeholder: question.placeholder || "Число",
+      scoringHint: `${question.points ?? 3} балла — кто ближе всех`,
+    };
+  }
+
+  if (round.type === "pricier") {
+    const imgs = (question.images || []).map((img) => imagePath(round, img));
+    return {
+      ...base,
+      text: question.text || "Что дороже?",
+      options: question.options,
+      optionImages: imgs.length ? imgs : undefined,
+    };
+  }
+
+  if (round.type === "badreview") {
+    return {
+      ...base,
+      text: question.text || "О чём этот отзыв?",
+      quote: question.quote || question.text,
+      options: question.options,
+    };
+  }
+
+  return base;
+}
+
+function formatReviewQuestion(round, question, questionIndex, answerBreakdown) {
+  const formatted = formatQuestion(round, question, questionIndex);
+  const review = {
+    ...formatted,
+    reviewMode: true,
+    acceptAlternatives: question.accept || [],
+  };
+
+  if (round.type === "place") {
+    review.correctCity = question.city;
+    review.correctCountry = question.country;
+    review.correctAnswer = `${question.city}, ${question.country}`;
+    review.scoringHint = `Город — ${question.cityPoints ?? 3} б. · Страна — ${question.countryPoints ?? 1} б.`;
+    if (question.acceptCity?.length) review.acceptCity = question.acceptCity;
+    if (question.acceptCountry?.length) review.acceptCountry = question.acceptCountry;
+  } else if (round.type === "closest") {
+    review.correctAnswer = String(question.answer);
+    if (question.unit) review.correctAnswer += ` ${question.unit}`;
+    review.scoringHint = `${question.points ?? 3} балла — ближайший ответ`;
+  } else if (round.type === "badreview") {
+    review.correctAnswer = question.answer;
+    review.quote = question.quote || question.text;
+  } else {
+    review.correctAnswer = question.answer;
+  }
+
+  if (answerBreakdown) {
+    review.answerBreakdown = answerBreakdown;
+  }
+
+  return review;
+}
+
+function truncate(str, max) {
+  const t = String(str).replace(/\s+/g, " ").trim();
+  if (t.length <= max) return t;
+  return `${t.slice(0, max - 1)}…`;
+}
+
+function getQuestionLabel(round, question, questionIndex) {
+  if (question.text) return truncate(question.text, 56);
+  if (question.quote) return truncate(question.quote, 56);
+  if (question.image) return `📷 ${question.image}`;
+  if (question.audio) return `🎵 ${question.audio}`;
+  if (question.options?.length) return truncate(question.options.join(" / "), 56);
+  return `Вопрос ${questionIndex + 1}`;
+}
+
+const ROUND_TYPE_LABELS = {
+  choice: "Выбор",
+  truefalse: "П/Л",
+  logic: "Текст",
+  movie: "Фильм",
+  song: "Песня",
+  brand: "Бренд",
+  place: "Место",
+  closest: "Цифра",
+  pricier: "Цена",
+  badreview: "Отзыв",
+  cover: "Обложка",
+};
+
+module.exports = {
+  formatQuestion,
+  formatReviewQuestion,
+  getQuestionLabel,
+  ROUND_TYPE_LABELS,
+};
