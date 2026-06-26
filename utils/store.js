@@ -5,7 +5,25 @@ const {
   isAnswerCorrect,
   parseNumericAnswer,
   scorePlaceAnswer,
+  scoreSongAnswer,
 } = require("./answerMatch");
+const { getOrCreateAudioClip } = require("./audioClip");
+const {
+  initReviewMatch,
+  formatReviewMatchQuestion,
+  formatReviewMatchSummary,
+  recordReviewMatchAnswer,
+  getActivePlayerId,
+} = require("./reviewMatch");
+const {
+  getQuestionPoints,
+  getSongTitlePoints,
+  getSongArtistPoints,
+  getCityPoints,
+  getCountryPoints,
+  getClosestPoints,
+  formatScore,
+} = require("./scoring");
 const { buildAnswerBreakdown } = require("./answerArchive");
 const persistence = require("./persistence");
 const { buildRoundIntro } = require("./roundMeta");
@@ -56,34 +74,64 @@ function getRoundIntro(sess) {
   );
 }
 
+function attachSongAudioClip(sess, round, question, questionIndex, formatted) {
+  if (round.type !== "song") return formatted;
+  const clip = getOrCreateAudioClip(sess, round, question, questionIndex);
+  if (!clip) return formatted;
+  formatted.audioClip = clip;
+  formatted.audioClipHint = clip.random
+    ? `Случайный фрагмент · ${clip.duration} сек`
+    : `С ${clip.start} сек · ${clip.duration} сек`;
+  return formatted;
+}
+
 function getReviewQuestion(sess) {
   const round = sess.rounds[sess.currentRoundIndex];
   if (!round) return null;
+
+  if (round.type === "reviewmatch") {
+    return formatReviewMatchSummary(sess, round);
+  }
+
   const question = round.questions[sess.reviewQuestionIndex];
   if (!question) return null;
   const key = `${sess.currentRoundIndex}-${sess.reviewQuestionIndex}`;
   const breakdown = sess.roundAnswers?.[key] || null;
-  return formatReviewQuestion(round, question, sess.reviewQuestionIndex, breakdown);
+  const formatted = formatReviewQuestion(round, question, sess.reviewQuestionIndex, breakdown);
+  return attachSongAudioClip(sess, round, question, sess.reviewQuestionIndex, formatted);
 }
-function getCurrentQuestion(sess) {
+
+function getCurrentQuestion(sess, viewerPlayerId = null) {
   const round = sess.rounds[sess.currentRoundIndex];
   if (!round) return null;
+
+  if (round.type === "reviewmatch" && sess.phase === "question") {
+    return formatReviewMatchQuestion(sess, round, viewerPlayerId);
+  }
+
   const question = round.questions[sess.currentQuestionIndex];
   if (!question) return null;
-  return formatQuestion(round, question, sess.currentQuestionIndex);
+  const formatted = formatQuestion(round, question, sess.currentQuestionIndex);
+  return attachSongAudioClip(sess, round, question, sess.currentQuestionIndex, formatted);
 }
 
 function playerHasAnswer(answer) {
   if (answer === null || answer === "") return false;
   if (typeof answer === "object") {
-    return Boolean(String(answer.city || "").trim() || String(answer.country || "").trim());
+    if ("city" in answer || "country" in answer) {
+      return Boolean(String(answer.city || "").trim() || String(answer.country || "").trim());
+    }
+    if ("title" in answer || "artist" in answer) {
+      return Boolean(String(answer.title || "").trim() || String(answer.artist || "").trim());
+    }
   }
   return true;
 }
 
 function scoreClosestQuestion(sess, question) {
+  const round = sess.rounds[sess.currentRoundIndex];
   const correct = Number(question.answer);
-  const points = question.points ?? 3;
+  const points = getClosestPoints(round, question);
   let bestDiff = Infinity;
   const entries = [];
 
@@ -107,8 +155,9 @@ function scoreClosestQuestion(sess, question) {
 }
 
 function scorePlaceQuestion(sess, question) {
-  const cityPoints = question.cityPoints ?? 3;
-  const countryPoints = question.countryPoints ?? 1;
+  const round = sess.rounds[sess.currentRoundIndex];
+  const cityPoints = getCityPoints(round, question);
+  const countryPoints = getCountryPoints(round, question);
 
   Object.values(sess.players).forEach((player) => {
     if (playerHasAnswer(player.answer)) {
@@ -120,9 +169,24 @@ function scorePlaceQuestion(sess, question) {
   });
 }
 
+function scoreSongQuestion(sess, question) {
+  const round = sess.rounds[sess.currentRoundIndex];
+  const titlePoints = getSongTitlePoints(round, question);
+  const artistPoints = getSongArtistPoints(round, question);
+
+  Object.values(sess.players).forEach((player) => {
+    if (playerHasAnswer(player.answer)) {
+      const result = scoreSongAnswer(player.answer, question);
+      if (result.title) player.score += titlePoints;
+      if (result.artist) player.score += artistPoints;
+    }
+    player.answer = null;
+  });
+}
+
 function scoreCurrentQuestion(sess) {
   const round = sess.rounds[sess.currentRoundIndex];
-  if (!round) return;
+  if (!round || round.type === "reviewmatch") return;
   const questionIndex = sess.currentQuestionIndex;
   const question = round.questions[questionIndex];
   if (!question) return;
@@ -139,10 +203,15 @@ function scoreCurrentQuestion(sess) {
     return;
   }
 
+  if (round.type === "song") {
+    scoreSongQuestion(sess, question);
+    return;
+  }
+
   Object.values(sess.players).forEach((player) => {
     if (playerHasAnswer(player.answer)) {
       if (isAnswerCorrect(player.answer, question, round.type)) {
-        player.score += question.points ?? 1;
+        player.score += getQuestionPoints(round, question);
       }
     }
     player.answer = null;
@@ -179,11 +248,20 @@ function rejoinPlayer(gameId, playerId, socketId) {
 function getPlayers(gameId) {
   const sess = ensureGame(gameId);
   if (!sess) return [];
+  const round = sess.rounds[sess.currentRoundIndex];
+  const activePlayerId =
+    round?.type === "reviewmatch" && sess.phase === "question"
+      ? getActivePlayerId(sess)
+      : null;
+
   return Object.entries(sess.players).map(([id, p]) => ({
     id,
     name: p.name,
     avatar: p.avatar,
-    answered: playerHasAnswer(p.answer),
+    answered: activePlayerId
+      ? id !== activePlayerId
+      : playerHasAnswer(p.answer),
+    isActiveTurn: activePlayerId === id,
     online: Boolean(p.socketId),
   }));
 }
@@ -198,6 +276,7 @@ function startQuiz(gameId) {
   sess.reviewQuestionIndex = 0;
   sess.phase = "round_intro";
   sess.roundAnswers = {};
+  sess.audioClips = {};
   Object.values(sess.players).forEach((p) => {
     p.score = 0;
     p.answer = null;
@@ -214,11 +293,25 @@ function advanceQuestion(gameId) {
   if (sess.phase === "round_intro") {
     sess.phase = "question";
     sess.currentQuestionIndex = 0;
+    snapshotRoundScores(sess);
+    const round = sess.rounds[sess.currentRoundIndex];
+    if (round?.type === "reviewmatch") {
+      initReviewMatch(sess);
+    }
     persist(gameId);
     return { finished: false, currentQuestion: getCurrentQuestion(sess) };
   }
 
   if (sess.phase === "round_leaderboard") {
+    if (sess.leaderboardStep === "round") {
+      sess.leaderboardStep = "total";
+      persist(gameId);
+      return {
+        finished: false,
+        roundLeaderboard: buildRoundLeaderboardPayload(sess, gameId),
+      };
+    }
+
     if (sess.currentRoundIndex >= sess.rounds.length - 1) {
       sess.phase = "finished";
       sess.status = "finished";
@@ -235,6 +328,8 @@ function advanceQuestion(gameId) {
     sess.currentQuestionIndex = 0;
     sess.reviewQuestionIndex = 0;
     sess.roundAnswers = {};
+    sess.audioClips = {};
+    sess.matchState = null;
     sess.phase = "round_intro";
     persist(gameId);
     return { finished: false, roundIntro: getRoundIntro(sess) };
@@ -249,18 +344,26 @@ function advanceQuestion(gameId) {
 
   if (sess.phase === "round_review") {
     const round = sess.rounds[sess.currentRoundIndex];
-    sess.reviewQuestionIndex += 1;
 
-    if (sess.reviewQuestionIndex >= round.questions.length) {
-      sess.phase = "round_leaderboard";
+    if (round.type === "reviewmatch") {
+      enterRoundLeaderboard(sess);
       persist(gameId);
       return {
         finished: false,
         roundEnd: true,
-        round: round.id,
-        roundTitle: round.title,
-        leaderboard: getLeaderboard(gameId),
-        isLastRound: sess.currentRoundIndex >= sess.rounds.length - 1,
+        roundLeaderboard: buildRoundLeaderboardPayload(sess, gameId),
+      };
+    }
+
+    sess.reviewQuestionIndex += 1;
+
+    if (sess.reviewQuestionIndex >= round.questions.length) {
+      enterRoundLeaderboard(sess);
+      persist(gameId);
+      return {
+        finished: false,
+        roundEnd: true,
+        roundLeaderboard: buildRoundLeaderboardPayload(sess, gameId),
       };
     }
 
@@ -271,6 +374,11 @@ function advanceQuestion(gameId) {
   scoreCurrentQuestion(sess);
 
   const round = sess.rounds[sess.currentRoundIndex];
+  if (round.type === "reviewmatch") {
+    persist(gameId);
+    return { finished: false, currentQuestion: getCurrentQuestion(sess) };
+  }
+
   sess.currentQuestionIndex += 1;
 
   if (sess.currentQuestionIndex >= round.questions.length) {
@@ -299,6 +407,33 @@ function advanceQuestion(gameId) {
   return { finished: false, currentQuestion: getCurrentQuestion(sess) };
 }
 
+function recordMatchAnswer(gameId, playerId, place) {
+  const sess = ensureGame(gameId);
+  if (!sess) return null;
+  const result = recordReviewMatchAnswer(sess, playerId, place);
+  if (!result.ok) return result;
+  persist(gameId);
+
+  if (result.done) {
+    persistence.appendHistory(sess, {
+      type: "round_complete",
+      round: sess.rounds[sess.currentRoundIndex].id,
+      roundTitle: sess.rounds[sess.currentRoundIndex].title,
+    });
+    return {
+      ok: true,
+      roundComplete: result.roundComplete,
+      feedback: result.feedback,
+    };
+  }
+
+  return {
+    ok: true,
+    currentQuestion: getCurrentQuestion(sess),
+    feedback: result.feedback,
+  };
+}
+
 function recordAnswer(gameId, playerId, answer) {
   const sess = ensureGame(gameId);
   if (!sess || sess.phase !== "question") return null;
@@ -322,17 +457,47 @@ function recordAnswerBySocket(gameId, socketId, answer) {
   return true;
 }
 
-function getLeaderboard(gameId) {
+function snapshotRoundScores(sess) {
+  sess.scoreAtRoundStart = {};
+  for (const [id, p] of Object.entries(sess.players)) {
+    sess.scoreAtRoundStart[id] = p.score ?? 0;
+  }
+}
+
+function enterRoundLeaderboard(sess) {
+  sess.leaderboardStep = sess.currentRoundIndex >= 1 ? "round" : "total";
+  sess.phase = "round_leaderboard";
+}
+
+function getLeaderboard(gameId, mode = "total") {
   const sess = ensureGame(gameId);
   if (!sess) return [];
   return Object.entries(sess.players)
-    .map(([id, p]) => ({
-      id,
-      name: p.name,
-      score: p.score,
-      avatar: p.avatar,
-    }))
+    .map(([id, p]) => {
+      const total = p.score ?? 0;
+      const baseline = sess.scoreAtRoundStart?.[id] ?? 0;
+      const raw = mode === "round" ? total - baseline : total;
+      return {
+        id,
+        name: p.name,
+        score: raw,
+        scoreLabel: formatScore(raw),
+        avatar: p.avatar,
+      };
+    })
     .sort((a, b) => b.score - a.score);
+}
+
+function buildRoundLeaderboardPayload(sess, gameId) {
+  const round = sess.rounds[sess.currentRoundIndex];
+  const step = sess.leaderboardStep || "total";
+  return {
+    round: round.id,
+    roundTitle: round.title,
+    step,
+    leaderboard: getLeaderboard(gameId, step === "round" ? "round" : "total"),
+    isLastRound: sess.currentRoundIndex >= sess.rounds.length - 1,
+  };
 }
 
 function detachSocket(socketId) {
@@ -378,13 +543,7 @@ function buildSessionSnapshot(sess, gameId) {
   }
 
   if (sess.phase === "round_leaderboard") {
-    const round = sess.rounds[sess.currentRoundIndex];
-    snap.roundLeaderboard = {
-      round: round.id,
-      roundTitle: round.title,
-      leaderboard: getLeaderboard(gameId),
-      isLastRound: sess.currentRoundIndex >= sess.rounds.length - 1,
-    };
+    snap.roundLeaderboard = buildRoundLeaderboardPayload(sess, gameId);
   }
 
   if (sess.phase === "finished") {
@@ -405,9 +564,17 @@ function getPlayerSessionSnapshot(gameId, playerId) {
   if (!snap) return null;
   const sess = ensureGame(gameId);
   const player = sess?.players[playerId];
+  const round = sess?.rounds[sess.currentRoundIndex];
+
+  if (round?.type === "reviewmatch" && sess.phase === "question") {
+    snap.currentQuestion = getCurrentQuestion(sess, playerId);
+    snap.playerAnswered = getActivePlayerId(sess) !== playerId;
+  } else {
+    snap.playerAnswered =
+      playerHasAnswer(player?.answer) && sess.phase === "question";
+  }
+
   snap.playerId = playerId;
-  snap.playerAnswered =
-    playerHasAnswer(player?.answer) && sess.phase === "question";
   return snap;
 }
 
@@ -438,6 +605,7 @@ module.exports = {
   startQuiz,
   advanceQuestion,
   recordAnswer,
+  recordMatchAnswer,
   recordAnswerBySocket,
   getLeaderboard,
   detachSocket,

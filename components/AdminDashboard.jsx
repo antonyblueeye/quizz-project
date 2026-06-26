@@ -8,6 +8,7 @@ import QuestionCard from "./QuestionCard";
 import Timer from "./Timer";
 import Leaderboard from "./Leaderboard";
 import RoundIntroPanel from "./RoundIntroPanel";
+import ReviewMatchPanel from "./ReviewMatchPanel";
 
 function applySessionSync(snap, setters) {
   const {
@@ -228,16 +229,22 @@ export default function AdminDashboard({ gameId, quizTemplateId }) {
   const nextButtonLabel = roundIntro
     ? "Начать раунд"
     : roundLeaderboard
-    ? roundLeaderboard.isLastRound
-      ? "Завершить квиз"
-      : "Следующий раунд"
+    ? roundLeaderboard.step === "round"
+      ? "Итоговый рейтинг"
+      : roundLeaderboard.isLastRound
+        ? "Завершить квиз"
+        : "Следующий раунд"
     : reviewQuestion
-      ? reviewQuestion.questionNumber >= reviewQuestion.totalInRound
+      ? reviewQuestion.type === "reviewmatch"
         ? "Показать рейтинг"
-        : "Следующий ответ"
+        : reviewQuestion.questionNumber >= reviewQuestion.totalInRound
+          ? "Показать рейтинг"
+          : "Следующий ответ"
       : roundComplete
         ? "Перейти к ответам"
         : "Следующий вопрос";
+
+  const isReviewMatchActive = question?.type === "reviewmatch";
 
   return (
     <main className="quiz-admin-page">
@@ -298,10 +305,13 @@ export default function AdminDashboard({ gameId, quizTemplateId }) {
         <section className="quiz-players-section">
           <h2 className="quiz-section-title">
             Игроки ({players.length})
-            {question && players.length > 0 && (
+            {question && !isReviewMatchActive && (
               <span className="quiz-answers-progress">
                 {" "}· {answeredCount}/{players.length} ответили
               </span>
+            )}
+            {isReviewMatchActive && (
+              <span className="quiz-answers-progress"> · по очереди</span>
             )}
           </h2>
           {players.length === 0 ? (
@@ -311,7 +321,7 @@ export default function AdminDashboard({ gameId, quizTemplateId }) {
               {players.map((p) => (
                 <li
                   key={p.id}
-                  className={`quiz-player-item${p.answered ? " quiz-player-item--answered" : ""}${!p.online ? " quiz-player-item--offline" : ""}`}
+                  className={`quiz-player-item${p.answered ? " quiz-player-item--answered" : ""}${p.isActiveTurn ? " quiz-player-item--active-turn" : ""}${!p.online ? " quiz-player-item--offline" : ""}`}
                 >
                   {p.avatar ? (
                     <img src={p.avatar} alt="" className="player-avatar" />
@@ -339,11 +349,19 @@ export default function AdminDashboard({ gameId, quizTemplateId }) {
         {question && (
           <section className="quiz-game-section">
             <h2 className="quiz-section-title">{question.roundTitle}</h2>
-            <Timer seconds={timeLeft} total={60} />
-            <QuestionCard question={question} onSubmit={() => {}} disabled />
-            <button type="button" className="button quiz-next-btn" onClick={handleNext}>
-              {nextButtonLabel}
-            </button>
+            {isReviewMatchActive ? (
+              <ReviewMatchPanel data={question} disabled showMeta={false} />
+            ) : (
+              <>
+                <Timer seconds={timeLeft} total={60} />
+                <QuestionCard question={question} onSubmit={() => {}} disabled />
+              </>
+            )}
+            {!isReviewMatchActive && (
+              <button type="button" className="button quiz-next-btn" onClick={handleNext}>
+                {nextButtonLabel}
+              </button>
+            )}
           </section>
         )}
 
@@ -360,7 +378,11 @@ export default function AdminDashboard({ gameId, quizTemplateId }) {
         {reviewQuestion && (
           <section className="quiz-game-section quiz-review-section">
             <h2 className="quiz-section-title">Разбор ответов · {reviewQuestion.roundTitle}</h2>
-            <QuestionCard question={reviewQuestion} onSubmit={() => {}} disabled />
+            {reviewQuestion.type === "reviewmatch" ? (
+              <ReviewMatchPanel data={reviewQuestion} disabled />
+            ) : (
+              <QuestionCard question={reviewQuestion} onSubmit={() => {}} disabled />
+            )}
             <button type="button" className="button quiz-next-btn" onClick={handleNext}>
               {nextButtonLabel}
             </button>
@@ -371,7 +393,11 @@ export default function AdminDashboard({ gameId, quizTemplateId }) {
           <section className="quiz-leaderboard-section">
             <Leaderboard
               data={roundLeaderboard.leaderboard}
-              title={`Рейтинг после раунда ${roundLeaderboard.round}: ${roundLeaderboard.roundTitle}`}
+              title={
+                roundLeaderboard.step === "round"
+                  ? `Рейтинг за раунд ${roundLeaderboard.round}: ${roundLeaderboard.roundTitle}`
+                  : `Общий рейтинг · после ${roundLeaderboard.round} раундов`
+              }
             />
             <button type="button" className="button quiz-next-btn" onClick={handleNext}>
               {nextButtonLabel}

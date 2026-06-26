@@ -3,6 +3,7 @@ const {
   isChoiceType,
   parseNumericAnswer,
   scorePlaceAnswer,
+  scoreSongAnswer,
   normalize,
 } = require("./answerMatch");
 
@@ -19,9 +20,16 @@ function collectPlayerAnswers(sess) {
     .filter(([, p]) => {
       if (p.answer === null || p.answer === "") return false;
       if (typeof p.answer === "object") {
-        return Boolean(
-          String(p.answer.city || "").trim() || String(p.answer.country || "").trim()
-        );
+        if ("city" in p.answer || "country" in p.answer) {
+          return Boolean(
+            String(p.answer.city || "").trim() || String(p.answer.country || "").trim()
+          );
+        }
+        if ("title" in p.answer || "artist" in p.answer) {
+          return Boolean(
+            String(p.answer.title || "").trim() || String(p.answer.artist || "").trim()
+          );
+        }
       }
       return true;
     })
@@ -37,6 +45,12 @@ function formatDisplayAnswer(answer, type) {
     if (answer.city?.trim()) parts.push(answer.city.trim());
     if (answer.country?.trim()) parts.push(answer.country.trim());
     return parts.join(", ") || "—";
+  }
+  if (type === "song" && typeof answer === "object" && answer) {
+    const parts = [];
+    if (answer.title?.trim()) parts.push(answer.title.trim());
+    if (answer.artist?.trim()) parts.push(answer.artist.trim());
+    return parts.join(" — ") || "—";
   }
   return String(answer ?? "").trim() || "—";
 }
@@ -158,6 +172,54 @@ function buildPlaceBreakdown(players, question) {
   };
 }
 
+function buildSongBreakdown(players, question) {
+  const titleGroups = new Map();
+  const artistGroups = new Map();
+  const titleCorrectPlayers = [];
+  const artistCorrectPlayers = [];
+
+  for (const p of players) {
+    const title = String(p.answer?.title || "").trim();
+    const artist = String(p.answer?.artist || "").trim();
+    const result = scoreSongAnswer(p.answer, question);
+    const chip = playerChip(p.id, p);
+
+    if (result.title) titleCorrectPlayers.push(chip);
+    if (result.artist) artistCorrectPlayers.push(chip);
+
+    if (title) {
+      const key = normalize(title);
+      if (!titleGroups.has(key)) {
+        titleGroups.set(key, {
+          display: title,
+          isCorrect: result.title,
+          players: [],
+        });
+      }
+      titleGroups.get(key).players.push(chip);
+    }
+
+    if (artist) {
+      const key = normalize(artist);
+      if (!artistGroups.has(key)) {
+        artistGroups.set(key, {
+          display: artist,
+          isCorrect: result.artist,
+          players: [],
+        });
+      }
+      artistGroups.get(key).players.push(chip);
+    }
+  }
+
+  return {
+    titleCorrectPlayers,
+    artistCorrectPlayers,
+    titleGroups: [...titleGroups.values()],
+    artistGroups: [...artistGroups.values()],
+  };
+}
+
 function buildChoiceBreakdown(round, question, players) {
   const options = getChoiceOptions(round, question);
   return options.map((opt) => ({
@@ -179,6 +241,10 @@ function buildAnswerBreakdown(sess, round, question) {
 
   if (type === "place") {
     return { type, ...buildPlaceBreakdown(players, question) };
+  }
+
+  if (type === "song") {
+    return { type, ...buildSongBreakdown(players, question) };
   }
 
   if (isChoiceType(type)) {

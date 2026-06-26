@@ -7,55 +7,107 @@
       "questions": [
         {
           "text": "Какая страна производит больше всего сыра?",
-          "options": ["Франция", "Италия", "США", "Швейцарий"],
+          "options": [
+            "Франция",
+            "Италия",
+            "США",
+            "Швейцарий"
+          ],
           "answer": "США"
         },
         {
           "text": "Что НЕ является реальным?",
-          "options": ["В Японии есть остров, где живут сотни кроликов", "В Норвегии существует почтовый индекс для Северного полюса", "В Австралии есть розовое озеро", "В Канаде запрещено носить желтые носки по пятницам"],
+          "options": [
+            "В Японии есть остров, где живут сотни кроликов",
+            "В Норвегии существует почтовый индекс для Северного полюса",
+            "В Австралии есть розовое озеро",
+            "В Канаде запрещено носить желтые носки по пятницам"
+          ],
           "answer": "В Канаде запрещено носить желтые носки по пятницам"
         },
         {
           "text": "Что содержит больше чистого алкоголя?",
-          "options": ["1 бокал вина", "1 бокал пива", "1 шот водки", "Одинаково"],
+          "options": [
+            "1 бокал вина",
+            "1 бокал пива",
+            "1 шот водки",
+            "Одинаково"
+          ],
           "answer": "1 бокал вина"
         },
         {
           "text": "У какого животного отпечаток носа уникален?",
-          "options": ["Кошка", "Собака", "Лошадь", "Корова"],
+          "options": [
+            "Кошка",
+            "Собака",
+            "Лошадь",
+            "Корова"
+          ],
           "answer": "Собака"
         },
         {
           "text": "Какой шанс угадать случайный 4-значный PIN с первой попытки?",
-          "options": ["1%", "0.1%", "0.01%", "0.001%"],
+          "options": [
+            "1%",
+            "0.1%",
+            "0.01%",
+            "0.001%"
+          ],
           "answer": "0.01%"
         },
         {
           "text": "Что потребляет больше энергии?",
-          "options": ["Зарядка телефона 1 час", "Прогрев воды в микроволновке", "Работа ноутбука", "Светодиодная лампа"],
+          "options": [
+            "Зарядка телефона 1 час",
+            "Прогрев воды в микроволновке",
+            "Работа ноутбука",
+            "Светодиодная лампа"
+          ],
           "answer": "Прогрев воды в микроволновке"
         },
         {
           "text": "Какой океан самый большой на Земле?",
-          "options": ["Атлантический", "Индийский", "Тихий", "Северный Ледовитый"],
+          "options": [
+            "Атлантический",
+            "Индийский",
+            "Тихий",
+            "Северный Ледовитый"
+          ],
           "answer": "Тихий"
         },
         {
           "text": "Если вчера был день после понедельника, какой сегодня день?",
-          "options": ["Понедельник", "Вторник", "Среда", "Четверг"],
+          "options": [
+            "Понедельник",
+            "Вторник",
+            "Среда",
+            "Четверг"
+          ],
           "answer": "Среда"
         },
         {
           "text": "Какое животное считается самым быстрым на суше?",
-          "options": ["Лев", "Гепард", "Лошадь", "Страус"],
+          "options": [
+            "Лев",
+            "Гепард",
+            "Лошадь",
+            "Страус"
+          ],
           "answer": "Гепард"
         },
         {
           "text": "Какая страна больше по площади?",
-          "options": ["Индия", "Аргентина", "Казахстан", "Судан"],
+          "options": [
+            "Индия",
+            "Аргентина",
+            "Казахстан",
+            "Судан"
+          ],
           "answer": "Казахстан"
         }
-      ]
+      ],
+      "questionPoints": 0.5,
+      "scoring": "0,5 балла за каждый правильный ответ."
     },
     {
       "id": 2,
@@ -65,127 +117,560 @@
       "questions": [
         {
           "image": "round_2_1.jpg",
-          "answer": "Матрица",
-          "accept": ["Matrix", "The Matrix"],
-          "patterns": ["матр[иы]ц", "matr[iy]x"],
-          "match": { "fuzzy": true }
+          "answer": "Джанго освобожденный",
+          "accept": [
+            "Django Unchained",
+            "Django",
+            "Джанго",
+            "Жанго освобожденный",
+            "Джанго освобождённый",
+            "Джанго освобождён",
+            "Джанго освобожденый"
+          ],
+          "patterns": [
+            "django",
+            "unchained",
+            "джанго",
+            "освобожден"
+          ],
+          "match": {
+            "fuzzy": true
+          }
         },
         {
           "image": "round_2_2.jpg",
-          "answer": "Титаник",
-          "accept": ["Titanic"]
+          "answer": "Ла-Ла Ленд",
+          "accept": [
+            "Ла-Ла Ленд",
+            "Ла Ла Ленд",
+            "Лалаленд",
+            "Ла-ла ленд",
+            "Ла ла ленд",
+            "La La Land",
+            "Lalaland",
+            "La-La Land",
+            "LaLaLand"
+          ],
+          "patterns": [
+            "ла",
+            "ленд",
+            "land",
+            "lala"
+          ],
+          "match": {
+            "fuzzy": true
+          }
         },
         {
           "image": "round_2_3.jpg",
-          "answer": "Форрест Гамп",
-          "accept": ["Forrest Gump", "Форрест Гамп"]
+          "answer": "Зеленая книга",
+          "accept": [
+            "Зеленая книга",
+            "Зеленая Книга",
+            "Зелёная книга",
+            "Зелёная Книга",
+            "Зеленаякнига",
+            "Зелёнаякнига",
+            "Green Book",
+            "Greenbook",
+            "Green Book Movie"
+          ],
+          "patterns": [
+            "зеленая книга",
+            "зелёная книга",
+            "green book",
+            "greenbook",
+            "зелен",
+            "зелен",
+            "green"
+          ],
+          "match": {
+            "fuzzy": true
+          }
         },
         {
           "image": "round_2_4.jpg",
-          "answer": "Начало",
-          "accept": ["Inception"]
+          "answer": "Проект «Аве Мария»",
+          "accept": [
+            "Проект Аве Мария",
+            "Проект «Аве Мария»",
+            "Аве Мария",
+            "Project Hail Mary",
+            "Hail Mary",
+            "Проект Конец света",
+            "Проект «Конец света»",
+            "Конец света"
+          ],
+          "patterns": [
+            "проект аве мария",
+            "аве мария",
+            "project hail mary",
+            "hail mary",
+            "проект конец света",
+            "конец света"
+          ],
+          "match": {
+            "fuzzy": true
+          }
         },
         {
           "image": "round_2_5.jpg",
-          "answer": "1+1",
-          "accept": ["Intouchables", "Неприкасаемые"]
+          "answer": "Аватар 3",
+          "accept": [
+            "Аватар 3",
+            "Аватар III",
+            "Аватар: Огонь и пепел",
+            "Аватар Огонь и пепел",
+            "Avatar 3",
+            "Avatar III",
+            "Avatar: Fire and Ash",
+            "Avatar Fire and Ash",
+            "Аватар",
+            "Avatar"
+          ],
+          "patterns": [
+            "аватар",
+            "avatar",
+            "fire and ash",
+            "огонь и пепел"
+          ],
+          "match": {
+            "fuzzy": true
+          }
         },
         {
           "image": "round_2_6.jpg",
-          "answer": "Один дома",
-          "accept": ["Home Alone"]
+          "answer": "Одержимость",
+          "accept": [
+            "Одержимость",
+            "Whiplash",
+            "Уиплэш",
+            "Уиплеш",
+            "Виплэш",
+            "Виплеш"
+          ],
+          "patterns": [
+            "одержимость",
+            "whiplash",
+            "уипл",
+            "випл"
+          ],
+          "match": {
+            "fuzzy": true
+          }
         },
         {
           "image": "round_2_7.jpg",
-          "answer": "Джокер",
-          "accept": ["Joker", "Джокер"]
+          "answer": "Паразиты",
+          "accept": [
+            "Паразиты",
+            "Паразит",
+            "Parasite",
+            "Parasites",
+            "Gisaengchung",
+            "기생충"
+          ],
+          "patterns": [
+            "паразит",
+            "parasite",
+            "gisaeng",
+            "기생"
+          ],
+          "match": {
+            "fuzzy": true
+          }
         },
         {
           "image": "round_2_8.jpg",
-          "answer": "Аватар",
-          "accept": ["Avatar"]
+          "answer": "Оппенгеймер",
+          "accept": [
+            "Оппенгеймер",
+            "Опенгеймер",
+            "Оппенхаймер",
+            "Опенхаймер",
+            "Oppenheimer",
+            "Openheimer",
+            "Robert Oppenheimer",
+            "Роберт Оппенгеймер",
+            "Дж. Роберт Оппенгеймер",
+            "Дж Роберт Оппенгеймер"
+          ],
+          "patterns": [
+            "оппен",
+            "опен",
+            "oppen",
+            "openheimer",
+            "oppenheimer"
+          ],
+          "match": {
+            "fuzzy": true
+          }
         },
         {
           "image": "round_2_9.jpg",
-          "answer": "Гарри Поттер и философский камень",
+          "answer": "Мальчишник в Вегасе",
           "accept": [
-            "Harry Potter and the Philosopher's Stone",
-            "Harry Potter",
-            "Гарри Поттер"
+            "Мальчишник в Вегасе",
+            "Мальчишник в Вегас",
+            "Мальчишник в Вегассе",
+            "Мальчишник в Вегассе",
+            "Мальчишник в Вегасе 1",
+            "Мальчишник",
+            "The Hangover",
+            "Hangover",
+            "The Hangover 1",
+            "Hangover 1",
+            "Похмелье",
+            "Похмелье в Вегасе",
+            "Мальчишник: Вегас",
+            "Мальчишник Вегас",
+            "Вегас мальчишник"
           ],
           "patterns": [
-            "гарр[иы]?\\s*пот+[еёa]?р",
-            "harry\\s*pot+er",
-            "философск"
+            "мальчишник",
+            "вегас",
+            "vegas",
+            "hangover",
+            "похмелье"
           ],
-          "match": { "fuzzy": true, "threshold": 0.78 }
+          "match": {
+            "fuzzy": true
+          }
         },
         {
           "image": "round_2_10.jpg",
-          "answer": "Интерstellar",
-          "accept": ["Interstellar", "Интерstellar", "Интерстellar"]
+          "answer": "11 друзей Оушена",
+          "accept": [
+            "11 друзей Оушена",
+            "Одиннадцать друзей Оушена",
+            "11 друзей оушена",
+            "Одиннадцать друзей оушена",
+            "11 друзей Оушэна",
+            "Одиннадцать друзей Оушэна",
+            "11 друзей Оушен",
+            "Одиннадцать друзей Оушен",
+            "Друзья Оушена",
+            "Друзья Оушэн",
+            "Ocean's Eleven",
+            "Oceans Eleven",
+            "Oceans 11",
+            "Ocean Eleven",
+            "Ocean's 11",
+            "Ocean’s Eleven",
+            "Ocean’s 11",
+            "Оушен 11",
+            "Оушен 11 друзей"
+          ],
+          "patterns": [
+            "оушен",
+            "ocean",
+            "oceans",
+            "eleven",
+            "11",
+            "друзья оушена",
+            "ocean eleven"
+          ],
+          "match": {
+            "fuzzy": true
+          }
         }
-      ]
+      ],
+      "questionPoints": 1,
+      "scoring": "1 балл за каждый правильный ответ."
     },
     {
       "id": 3,
       "title": "Угадай песню",
       "type": "song",
       "audioFolder": "round3",
+      "audioClipSeconds": 45,
+      "audioClipRandom": false,
+      "audioClipStart": 20,
       "questions": [
         {
           "audio": "round_3_1.mp3",
-          "answer": "Bohemian Rhapsody",
-          "accept": ["Queen", "Квин", "Богемская рапсодия"]
+          "title": "Die With A Smile",
+          "artist": "Lady Gaga & Bruno Mars",
+          "acceptTitle": [
+            "Die With A Smile",
+            "Die With a Smile",
+            "Die w a Smile",
+            "Die With Smile",
+            "Die With A Smile (Bruno Mars)",
+            "Die With A Smile (Lady Gaga)",
+            "Die With a Smile - Lady Gaga & Bruno Mars",
+            "Die With A Smile Lady Gaga Bruno Mars",
+            "DieWithASmile",
+            "Die with a smile"
+          ],
+          "acceptArtist": [
+            "Lady Gaga & Bruno Mars",
+            "Lady Gaga and Bruno Mars",
+            "Lady Gaga, Bruno Mars",
+            "Lady Gaga",
+            "Bruno Mars",
+            "Gaga & Bruno Mars",
+            "Gaga and Bruno",
+            "Леди Гага и Бруно Марс",
+            "Леди Гага",
+            "Бруно Марс"
+          ],
+          "match": {
+            "fuzzy": true
+          }
         },
         {
           "audio": "round_3_2.mp3",
-          "answer": "Smells Like Teen Spirit",
-          "accept": ["Nirvana", "Нирвана"],
-          "patterns": ["nirvana", "нирван", "teen spirit"],
-          "match": { "fuzzy": true }
+          "title": "Billie Jean",
+          "artist": "Michael Jackson",
+          "acceptTitle": [
+            "Billie Jean",
+            "Billi Jean",
+            "BillieJean",
+            "Billie-Jean",
+            "Билли Джин",
+            "Билли-Джин",
+            "Billie Jean (Michael Jackson)"
+          ],
+          "acceptArtist": [
+            "Michael Jackson",
+            "Micheal Jackson",
+            "Mike Jackson",
+            "MJ",
+            "M. Jackson",
+            "Michael Jacksen",
+            "Майкл Джексон",
+            "Майкл Джэксон",
+            "Майкл Джексон MJ"
+          ],
+          "match": {
+            "fuzzy": true
+          }
         },
         {
           "audio": "round_3_3.mp3",
-          "answer": "Let It Be",
-          "accept": ["The Beatles", "Beatles", "Битлз"]
+          "title": "Smells Like Teen Spirit",
+          "artist": "Nirvana",
+          "acceptTitle": [
+            "Smells Like Teen Spirit",
+            "Smells like Teen Spirit",
+            "Smells Like Teen Spirit (Nirvana)",
+            "Smells Like Teen Spirit - Nirvana",
+            "Smells Like Teen Spirit Nirvana",
+            "Teen Spirit",
+            "Smells Like Teen",
+            "Smells Like Teen Spirit (Nirvana song)"
+          ],
+          "acceptArtist": [
+            "Nirvana",
+            "Nirvana band",
+            "Нирвана",
+            "Nirvana (band)"
+          ],
+          "match": {
+            "fuzzy": true
+          }
         },
         {
           "audio": "round_3_4.mp3",
-          "answer": "Nothing Else Matters",
-          "accept": ["Metallica", "Металлика"]
+          "title": "Seven Nation Army",
+          "artist": "The White Stripes",
+          "acceptTitle": [
+            "Seven Nation Army",
+            "Seven nation army",
+            "Seven Nation",
+            "Seven Nation Armie",
+            "Seven Nation Armi",
+            "Seven Nation Army (White Stripes)",
+            "Seven Nation Army - The White Stripes",
+            "Seven Nation Army White Stripes",
+            "Seven Nation Army (song)",
+            "Seven Nation Army chant"
+          ],
+          "acceptArtist": [
+            "The White Stripes",
+            "White Stripes",
+            "The White Stripes band",
+            "White Stripes band",
+            "White Stripes The",
+            "The Whites Stripes",
+            "Белые Страйпс",
+            "Уайт Страйпс"
+          ],
+          "match": {
+            "fuzzy": true
+          }
         },
         {
           "audio": "round_3_5.mp3",
-          "answer": "Back in Black",
-          "accept": ["AC/DC", "ACDC"]
+          "title": "Blinding Lights",
+          "artist": "The Weeknd",
+          "acceptTitle": [
+            "Blinding Lights",
+            "Blinding light",
+            "Blinding Lights (The Weeknd)",
+            "Blinding Lights - The Weeknd",
+            "Blinding Lights Weeknd",
+            "Blinding Lights The Weekend",
+            "Blinding Lights Weekend",
+            "Blinding Lights (song)",
+            "Blinding"
+          ],
+          "acceptArtist": [
+            "The Weeknd",
+            "Weeknd",
+            "The Weekend",
+            "Weekend",
+            "The Weeknd XO",
+            "The Weeknd music",
+            "Уикенд",
+            "Уикенд The Weeknd"
+          ],
+          "match": {
+            "fuzzy": true
+          }
         },
         {
           "audio": "round_3_6.mp3",
-          "answer": "Another Brick in the Wall",
-          "accept": ["Pink Floyd", "Пинк Флойд"]
+          "title": "Shape of You",
+          "artist": "Ed Sheeran",
+          "acceptTitle": [
+            "Shape of You",
+            "Shape of you",
+            "Shape Of You",
+            "Shapeofyou",
+            "Shape of u",
+            "Shape You",
+            "Shape of You (Ed Sheeran)",
+            "Shape of You - Ed Sheeran"
+          ],
+          "acceptArtist": [
+            "Ed Sheeran",
+            "Ed Sheeren",
+            "Ed Sheran",
+            "Sheeran",
+            "Ed",
+            "Ed Sheeran music",
+            "Эд Ширан",
+            "Эд Шераn"
+          ],
+          "match": {
+            "fuzzy": true
+          }
         },
         {
           "audio": "round_3_7.mp3",
-          "answer": "Creep",
-          "accept": ["Radiohead", "Радиохед"]
+          "title": "Believer",
+          "artist": "Imagine Dragons",
+          "acceptTitle": [
+            "Believer",
+            "believer",
+            "Beliver",
+            "Beleiver",
+            "Believer (Imagine Dragons)",
+            "Believer - Imagine Dragons",
+            "Believer Imagine Dragons"
+          ],
+          "acceptArtist": [
+            "Imagine Dragons",
+            "Imagene Dragons",
+            "Imagine Dragon",
+            "ImagineDragons",
+            "Imagin Dragons",
+            "Драконы Имэджин",
+            "Имеджин Драгонс",
+            "Imagine Dragons band"
+          ],
+          "match": {
+            "fuzzy": true
+          }
         },
         {
           "audio": "round_3_8.mp3",
-          "answer": "Californication",
-          "accept": ["Red Hot Chili Peppers", "RHCP", "Chili Peppers"]
+          "title": "Yellow",
+          "artist": "Coldplay",
+          "acceptTitle": [
+            "Yellow",
+            "yellow",
+            "Yellow (Coldplay)",
+            "Yellow - Coldplay",
+            "Yellow Coldplay",
+            "Yelow",
+            "Yello"
+          ],
+          "acceptArtist": [
+            "Coldplay",
+            "Cold Play",
+            "Coldplay band",
+            "Cold Play band",
+            "Колдплей",
+            "Колд Плей",
+            "Coldplay music"
+          ],
+          "match": {
+            "fuzzy": true
+          }
         },
         {
           "audio": "round_3_9.mp3",
-          "answer": "In the End",
-          "accept": ["Linkin Park", "Линкин Парк"]
+          "title": "You're Beautiful",
+          "artist": "James Blunt",
+          "acceptTitle": [
+            "You're Beautiful",
+            "You are Beautiful",
+            "Youre Beautiful",
+            "Your Beautiful",
+            "You're beautifull",
+            "Youre beautifull",
+            "You are beautifull",
+            "You're Beautiful (James Blunt)",
+            "You're Beautiful - James Blunt",
+            "Youre Beautiful James Blunt"
+          ],
+          "acceptArtist": [
+            "James Blunt",
+            "James Blunt music",
+            "Blunt",
+            "Джеймс Блант",
+            "Джеймс Блunt"
+          ],
+          "match": {
+            "fuzzy": true
+          }
         },
         {
           "audio": "round_3_10.mp3",
-          "answer": "Do I Wanna Know?",
-          "accept": ["Arctic Monkeys"]
+          "title": "Stressed Out",
+          "artist": "Twenty One Pilots",
+          "acceptTitle": [
+            "Stressed Out",
+            "Stressed out",
+            "StressedOut",
+            "Stresed Out",
+            "Stressed Out (Twenty One Pilots)",
+            "Stressed Out - Twenty One Pilots",
+            "Stressed Out Twenty One Pilots"
+          ],
+          "acceptArtist": [
+            "Twenty One Pilots",
+            "Twenty One Pilot",
+            "21 Pilots",
+            "21Pilot",
+            "Twentyonepilots",
+            "Twnety One Pilots",
+            "Tweny One Pilots",
+            "Твенти Ван Пайлотс",
+            "Твенти Уан Пилотс",
+            "Пилоты"
+          ],
+          "match": {
+            "fuzzy": true
+          }
         }
-      ]
+      ],
+      "titlePoints": 3,
+      "artistPoints": 1,
+      "scoring": "3 балла за название песни, 1 балл за группу (исполнителя)."
     },
     {
       "id": 4,
@@ -193,126 +678,383 @@
       "type": "truefalse",
       "questions": [
         {
-          "text": "Кит — самое крупное животное, когда-либо жившее на Земле.",
+          "text": "Wi-Fi изначально разрабатывался не для интернета, а для поиска чёрных дыр.",
           "answer": "Правда"
         },
         {
-          "text": "Венеция — столица Италии.",
+          "text": "Быки злятся на красный цвет ткани.",
           "answer": "Ложь"
         },
         {
-          "text": "Эйфелева башня изначально задумывалась как временное сооружение.",
-          "answer": "Правда"
-        },
-        {
-          "text": "Человеческий язык состоит из восьми отдельных мышц.",
-          "answer": "Правда"
-        },
-        {
-          "text": "Бананы — это ягоды, а клубника — нет.",
-          "answer": "Правда"
-        },
-        {
-          "text": "Солнце — жёлтая карликовая звезда.",
-          "answer": "Правда"
-        },
-        {
-          "text": "Вода кипит при 100 °C на любой высоте над уровнем моря.",
+          "text": "Люди в среднем проглатывают 8 пауков в год во сне.",
           "answer": "Ложь"
         },
         {
-          "text": "Осьминог имеет три сердца.",
-          "answer": "Правда"
-        },
-        {
-          "text": "Антарктида — самый большой континент по площади.",
+          "text": "Молния никогда не ударяет в одно место дважды.",
           "answer": "Ложь"
         },
         {
-          "text": "Золото — химический элемент.",
+          "text": "Мёд практически не портится и может храниться тысячи лет.",
           "answer": "Правда"
+        },
+        {
+          "text": "Во рту человека больше бактерий, чем людей на Земле.",
+          "answer": "Правда"
+        },
+        {
+          "text": "Ты теряешь примерно 3–4 кг массы за ночь из-за дыхания и потоотделения.",
+          "answer": "Правда"
+        },
+        {
+          "text": "Змеи могут гипнотизировать добычу взглядом.",
+          "answer": "Ложь"
+        },
+        {
+          "text": "В Антарктиде есть “сухие долины”, где почти никогда не было дождя миллионы лет.",
+          "answer": "Правда"
+        },
+        {
+          "text": "Человек может “перегрузить память”, если за один день выучит слишком много нового.",
+          "answer": "Ложь"
         }
-      ]
+      ],
+      "questionPoints": 0.5,
+      "scoring": "0,5 балла за каждый правильный ответ."
     },
     {
       "id": 5,
-      "title": "Логические вопросы",
-      "type": "logic",
+      "title": "Угадай язык",
+      "type": "choice",
+      "description": "10 фраз на разных языках. Прочитайте текст и выберите, на каком языке написана фраза.",
+      "scoring": "1 балл за каждый правильный ответ.",
       "questions": [
         {
-          "text": "Джулиан Барнс в «Истории мира в десяти с половиной главах» говорит, что ЭТО продолжалось не дольше самого обыкновенного английского лета. Назовите ЭТО двумя словами.",
-          "answer": "Первая мировая",
-          "accept": ["Первая мировая война", "ПМВ", "World War I", "WWI"],
-          "patterns": ["перв(ая|ой)\\s+миров", "world\\s+war\\s+i"],
-          "match": { "fuzzy": true, "threshold": 0.8 }
+          "text": "Біз әр күн сайын таңертең суық кофе ішпей, жылы шай ішкенді жөн көреміз, себебі ол денсаулыққа пайдалы деп санаймыз.",
+          "options": [
+            "Японский",
+            "Турецкий",
+            "Казахский",
+            "Чешский"
+          ],
+          "answer": "Казахский"
         },
         {
-          "text": "Как называется единственный металл, который в чистом виде жидкий при комнатной температуре?",
-          "answer": "Ртуть",
-          "accept": ["Mercury"]
+          "text": "毎朝、公園を散歩しながら鳥の声を聞くと、一日が静かで落ち着いた気持ちで始まることが多いです。",
+          "options": [
+            "Арабский",
+            "Китайский",
+            "Украинский",
+            "Японский"
+          ],
+          "answer": "Японский"
         },
         {
-          "text": "Какой город называют «вечным»?",
-          "answer": "Рим",
-          "accept": ["Rome"]
+          "text": "Cuando llegas a una ciudad nueva, lo primero que haces es buscar una cafetería pequeña donde puedas sentarte tranquilamente y observar la vida local durante un buen rato.",
+          "options": [
+            "Хинди",
+            "Итальянский",
+            "Африкаанс",
+            "Испанский"
+          ],
+          "answer": "Испанский"
         },
         {
-          "text": "Как называется страх перед пятницей 13-го?",
-          "answer": "Параскеведекatriaphobia",
-          "accept": ["Параскеведекatriaphobia", "Friggatriskaidekaphobia", "параскеведекatriaphobia"],
-          "match": { "fuzzy": true, "threshold": 0.65 }
+          "text": "Om morgenen liker jeg å gå en lang tur langs elven før jobben, fordi det hjelper meg å tenke klart og føle meg mer rolig resten av dagen.",
+          "options": [
+            "Турецкий",
+            "Немецкий",
+            "Словенский",
+            "Норвежский"
+          ],
+          "answer": "Норвежский"
         },
         {
-          "text": "Какое животное спит стоя?",
-          "answer": "Лошадь",
-          "accept": ["Конь", "Horse"]
+          "text": "عندما أسافر إلى مدينة لم أزرها من قبل، أحب أن أتجول في أزقّتها الضيقة وأتحدث مع السكان المحليين عن تاريخها وعاداتهم اليومية.",
+          "options": [
+            "Ирландский",
+            "Персидский",
+            "Урду",
+            "Арабский"
+          ],
+          "answer": "Арабский"
         },
         {
-          "text": "Как называется самая длинная река в мире?",
-          "answer": "Нил",
-          "accept": ["Amazon", "Амазонка", "Amazon River"],
-          "match": { "fuzzy": false }
+          "text": "Kada posetim nepoznato mesto, uvek pronađem mali restoran gde mogu da sednem, naručim domaću hranu i posmatram kako ljudi provode svoje večeri.",
+          "options": [
+            "Французский",
+            "Болгарский",
+            "Корейский",
+            "Сербский"
+          ],
+          "answer": "Сербский"
         },
         {
-          "text": "Какой газ составляет большую часть атмосферы Земли?",
-          "answer": "Азот",
-          "accept": ["Nitrogen"]
+          "text": "Lorsque je découvre une nouvelle ville, j'aime me promener sans plan précis et laisser les rues me guider vers des cafés, des marchés et des endroits inattendus.",
+          "options": [
+            "Казахский",
+            "Испанский",
+            "Итальянский",
+            "Французский"
+          ],
+          "answer": "Французский"
         },
         {
-          "text": "Как называется боязнь длинных слов? (ирония судьбы)",
-          "answer": "Hippopotomonstrosesquippedaliophobia",
-          "accept": ["Гиппopotomonstrosesquippedaliophobia"],
-          "match": { "fuzzy": true, "threshold": 0.7 }
+          "text": "Yeni bir şehre gittiğimde, sabah erkenden kalkıp mahalle bakkallarında taze ekmek arayıp sokakların sessizliğinde yürümeyi ve şehri yavaş yavaş tanımayı severim.",
+          "options": [
+            "Норвежский",
+            "Азербайджанский",
+            "Узбекский",
+            "Турецкий"
+          ],
+          "answer": "Турецкий"
         },
         {
-          "text": "Сколько букв «ф» в русском слове «профессор»?",
-          "answer": "1",
-          "accept": ["одна", "One"]
+          "text": "जब मैं किसी नए शहर में जाता हूँ, तो मुझे छोटी-छोटी गलियों में घूमना और स्थानीय लोगों से उनकी दैनिक ज़िंदगी, परंपराओं और पसंदीदा जगहों के बारе में बात करना बहुत अच्छा लगता है।",
+          "options": [
+            "Сербский",
+            "Бенгальский",
+            "Армянский",
+            "Хинди"
+          ],
+          "answer": "Хинди"
         },
         {
-          "text": "Как называется точка, в которой сходятся все меридианы?",
-          "answer": "Полюс",
-          "accept": ["Северный полюс", "North Pole", "Южный полюс"]
+          "text": "Nuair a théim i gcathair nua, is maith liom siúl tríd na sráideanna beaga ag éisteacht leis na daoine áitiúla ag labhairt ina dteanga féin faoi láthair na haimsire.",
+          "options": [
+            "Арабский",
+            "Английский",
+            "Белорусский",
+            "Ирландский"
+          ],
+          "answer": "Ирландский"
         }
-      ]
+      ],
+      "questionPoints": 1
     },
     {
       "id": 6,
-      "title": "Угадай бренд по логотипу",
-      "type": "brand",
+      "title": "Угадай знаменитость",
+      "type": "celebrity",
       "imageFolder": "round6",
+      "description": "На фото — известная личность, «переведённая» в женскую версию. Напишите, кто это на самом деле.",
+      "scoring": "1 балл за каждый правильный ответ.",
       "questions": [
-        { "image": "round_6_1.jpg", "answer": "Apple", "accept": ["Эпл", "Apple Inc"] },
-        { "image": "round_6_2.jpg", "answer": "Nike", "accept": ["Найк"] },
-        { "image": "round_6_3.jpg", "answer": "McDonald's", "accept": ["Макдоналдс", "McDonalds"] },
-        { "image": "round_6_4.jpg", "answer": "Starbucks", "accept": ["Старбакс"] },
-        { "image": "round_6_5.jpg", "answer": "Adidas", "accept": ["Адидас"] },
-        { "image": "round_6_6.jpg", "answer": "Google", "accept": ["Гугл"] },
-        { "image": "round_6_7.jpg", "answer": "Mercedes-Benz", "accept": ["Mercedes", "Мерседес"] },
-        { "image": "round_6_8.jpg", "answer": "Coca-Cola", "accept": ["Кока-кола", "Coca Cola"] },
-        { "image": "round_6_9.jpg", "answer": "Amazon", "accept": ["Амазон"] },
-        { "image": "round_6_10.jpg", "answer": "Spotify", "accept": ["Спотифай"] }
-      ]
+        {
+          "image": "round_6_1.png",
+          "answer": "Илон Маск",
+          "accept": [
+            "Elon Musk",
+            "Маск"
+          ],
+          "match": {
+            "fuzzy": true
+          }
+        },
+        {
+          "image": "round_6_2.png",
+          "answer": "Криштиану Роналду",
+          "accept": [
+            "Cristiano Ronaldo",
+            "Cristiano Ronaldo dos Santos Aveiro",
+            "Cristiano",
+            "Ronaldo",
+            "CR7",
+            "Cristiano CR7",
+            "Cristiano Ronaldo CR7",
+            "Криштиану Роналду",
+            "Криштиано Роналду",
+            "Криштіану Роналду",
+            "Криштиано",
+            "Криштіано",
+            "Роналду",
+            "Рональдо",
+            "Кріштіану Роналду",
+            "Криштиану Рональдо",
+            "Криштиано Рональдо"
+          ],
+          "match": {
+            "fuzzy": true
+          }
+        },
+        {
+          "image": "round_6_3.png",
+          "answer": "Джонни Депп",
+          "accept": [
+            "Johnny Depp",
+            "Johnny",
+            "Depp",
+            "John Depp",
+            "Jonny Depp",
+            "Jhonny Depp",
+            "Johnny Deep",
+            "Джонни Депп",
+            "Джони Депп",
+            "Джонни Деп",
+            "Джони Деп",
+            "Депп",
+            "Деп"
+          ],
+          "match": {
+            "fuzzy": true
+          }
+        },
+        {
+          "image": "round_6_4.png",
+          "answer": "Альберт Эйнштейн",
+          "accept": [
+            "Albert Einstein",
+            "Albert",
+            "Einstein",
+            "A. Einstein",
+            "Альберт Эйнштейн",
+            "Альберт Ейнштейн",
+            "Альберт Энштейн",
+            "Альберт Эйнштэйн",
+            "Альберт",
+            "Эйнштейн",
+            "Ейнштейн",
+            "Энштейн",
+            "Енштейн"
+          ],
+          "match": {
+            "fuzzy": true
+          }
+        },
+        {
+          "image": "round_6_5.png",
+          "answer": "Фредди Меркьюри",
+          "accept": [
+            "Freddie Mercury",
+            "Freddy Mercury",
+            "Freddie",
+            "Mercury",
+            "F. Mercury",
+            "Фредди Меркьюри",
+            "Фредди Меркюри",
+            "Фредди Меркури",
+            "Фреди Меркьюри",
+            "Фреди Меркури",
+            "Меркьюри",
+            "Меркьюри",
+            "Меркури",
+            "Меркюри"
+          ],
+          "match": {
+            "fuzzy": true
+          }
+        },
+        {
+          "image": "round_6_6.png",
+          "answer": "Юрий Дудь",
+          "accept": [
+            "Юрий Дудь",
+            "Юра Дудь",
+            "Дудь",
+            "Юрій Дудь",
+            "Юрій",
+            "Yuri Dud",
+            "Yury Dud",
+            "Yuriy Dud",
+            "Yuri Dud'",
+            "Yury Dud'",
+            "Юрий Дуд",
+            "Юрій Дуд"
+          ],
+          "match": {
+            "fuzzy": true
+          }
+        },
+        {
+          "image": "round_6_7.png",
+          "answer": "Макс Корж",
+          "accept": [
+            "Макс Корж",
+            "Макс",
+            "Корж",
+            "Max Korzh",
+            "Maks Korzh",
+            "Maksim Korzh",
+            "Maxim Korzh",
+            "Максим Корж",
+            "Максім Корж",
+            "Максим",
+            "Korzh"
+          ],
+          "match": {
+            "fuzzy": true
+          }
+        },
+        {
+          "image": "round_6_8.png",
+          "answer": "Арнольд Шварценеггер",
+          "accept": [
+            "Arnold Schwarzenegger",
+            "Arnold",
+            "Schwarzenegger",
+            "Arnie",
+            "Арнольд Шварценеггер",
+            "Арнольд Шварценегер",
+            "Арнольд Шварцнеггер",
+            "Арнольд Шварцнегер",
+            "Арнольд Шварценэггер",
+            "Арнольд",
+            "Шварценеггер",
+            "Шварценегер",
+            "Шварцнеггер",
+            "Шварцнегер"
+          ],
+          "match": {
+            "fuzzy": true
+          }
+        },
+        {
+          "image": "round_6_9.png",
+          "answer": "Павел Дуров",
+          "accept": [
+            "Павел Дуров",
+            "Pavel Durov",
+            "Pavel",
+            "Durov",
+            "Paul Durov",
+            "Павел",
+            "Дуров",
+            "Павел Дуров VK",
+            "Павел Дуров Telegram",
+            "Duroff",
+            "Duroff Pavel",
+            "Павел Дуров ВК",
+            "Павел Дуров Телеграм"
+          ],
+          "match": {
+            "fuzzy": true
+          }
+        },
+        {
+          "image": "round_6_10.png",
+          "answer": "Эд Ширан",
+          "accept": [
+            "Ed Sheeran",
+            "Ed Sheeren",
+            "Ed Sheran",
+            "Ed Shiran",
+            "Ed Sherran",
+            "Ed Sheeran music",
+            "Sheeran",
+            "Ed",
+            "Эд Ширан",
+            "Эд Шераn",
+            "Эд Шераан",
+            "Эд Шеран",
+            "Эд Широн",
+            "Эд Ширен",
+            "Ширан"
+          ],
+          "match": {
+            "fuzzy": true
+          }
+        }
+      ],
+      "questionPoints": 1
     },
     {
       "id": 7,
@@ -322,92 +1064,310 @@
       "questions": [
         {
           "image": "round_7_1.jpg",
-          "city": "Париж",
-          "country": "Франция",
-          "acceptCity": ["Paris"],
-          "acceptCountry": ["France"]
+          "city": "Lviv",
+          "country": "Ukraine",
+          "acceptCity": [
+            "Lviv",
+            "Lvov",
+            "Львів",
+            "Львов"
+          ],
+          "acceptCountry": [
+            "Ukraine",
+            "Ukraina",
+            "Україна",
+            "Украина",
+            "UA"
+          ]
         },
         {
           "image": "round_7_2.jpg",
-          "city": "Токио",
-          "country": "Япония",
-          "acceptCity": ["Tokyo"],
-          "acceptCountry": ["Japan"]
+          "city": "Rio de Janeiro",
+          "country": "Brazil",
+          "acceptCity": [
+            "Rio de Janeiro",
+            "Rio",
+            "Río de Janeiro",
+            "Río",
+            "Rio De Janeiro",
+            "Rio de Janeiro RJ",
+            "Rio de Janeyro",
+            "Рио-де-Жанейро",
+            "Рио де Жанейро",
+            "Рио",
+            "Ріо-де-Жанейро"
+          ],
+          "acceptCountry": [
+            "Brazil",
+            "Brasil",
+            "BR",
+            "Brazylia",
+            "Бразилия",
+            "Бразилія"
+          ]
         },
         {
           "image": "round_7_3.jpg",
-          "city": "Нью-Йорк",
-          "country": "США",
-          "acceptCity": ["New York", "NYC", "Нью Йорк"],
-          "acceptCountry": ["USA", "US", "United States", "Америка"]
+          "city": "Tokyo",
+          "country": "Japan",
+          "acceptCity": [
+            "Tokyo",
+            "Tokio",
+            "Tokyo Metropolis",
+            "Tokyo-to",
+            "Tokyo Prefecture",
+            "東京都",
+            "とうきょう",
+            "Токио",
+            "Токіо",
+            "Tokyo, Japan",
+            "Tokyo Japan"
+          ],
+          "acceptCountry": [
+            "Japan",
+            "Nippon",
+            "Nihon",
+            "JP",
+            "Япония",
+            "Японія"
+          ]
         },
         {
           "image": "round_7_4.jpg",
-          "city": "Рим",
-          "country": "Италия",
-          "acceptCity": ["Rome"],
-          "acceptCountry": ["Italy"]
+          "city": "Amsterdam",
+          "country": "Netherlands",
+          "acceptCity": [
+            "Amsterdam",
+            "Amsterdan",
+            "Амстердам",
+            "Амстерда́м",
+            "Amsterdam Centrum",
+            "A'dam",
+            "A Dam",
+            "Amsterdam, Netherlands",
+            "Amsterdam NL"
+          ],
+          "acceptCountry": [
+            "Netherlands",
+            "The Netherlands",
+            "Holland",
+            "Hollands",
+            "NL",
+            "Нидерланды",
+            "Нідерланди",
+            "Голландия",
+            "Голландія"
+          ]
         },
         {
           "image": "round_7_5.jpg",
-          "city": "Лондон",
-          "country": "Великобритания",
-          "acceptCity": ["London"],
-          "acceptCountry": ["UK", "England", "United Kingdom", "Англия"]
+          "city": "Barcelona",
+          "country": "Spain",
+          "acceptCity": [
+            "Barcelona",
+            "Barca",
+            "Барселона",
+            "Барселонa",
+            "Barcelona, Spain",
+            "Barcelona Spain",
+            "BCN",
+            "Barça",
+            "Barca city"
+          ],
+          "acceptCountry": [
+            "Spain",
+            "Espana",
+            "España",
+            "ES",
+            "Испания",
+            "Іспанія"
+          ]
         },
         {
           "image": "round_7_6.jpg",
-          "city": "Барселона",
-          "country": "Испания",
-          "acceptCity": ["Barcelona", "Барселона"],
-          "acceptCountry": ["Spain"]
+          "city": "Las Vegas",
+          "country": "United States",
+          "acceptCity": [
+            "Las Vegas",
+            "Vegas",
+            "Лас-Вегас",
+            "Лас Вегас",
+            "Las-Vegas",
+            "Sin City",
+            "Vegas NV",
+            "Las Vegas NV",
+            "Las Vegas, Nevada",
+            "Vegas, Nevada"
+          ],
+          "acceptCountry": [
+            "United States",
+            "USA",
+            "US",
+            "U.S.",
+            "U.S.A.",
+            "United States of America",
+            "Америка",
+            "США",
+            "СШA"
+          ]
         },
         {
           "image": "round_7_7.jpg",
-          "city": "Сидней",
-          "country": "Австралия",
-          "acceptCity": ["Sydney"],
-          "acceptCountry": ["Australia"]
+          "city": "London",
+          "country": "United Kingdom",
+          "acceptCity": [
+            "London",
+            "Londres",
+            "Лондон",
+            "Lондан",
+            "Greater London",
+            "London City",
+            "London, UK",
+            "London UK",
+            "LDN"
+          ],
+          "acceptCountry": [
+            "United Kingdom",
+            "UK",
+            "U.K.",
+            "Great Britain",
+            "Britain",
+            "England",
+            "GB",
+            "GBR",
+            "Великобритания",
+            "Великобританія",
+            "Англия",
+            "Англія"
+          ]
         },
         {
           "image": "round_7_8.jpg",
-          "city": "Дубай",
-          "country": "ОАЭ",
-          "acceptCity": ["Dubai"],
-          "acceptCountry": ["UAE", "United Arab Emirates", "Эмираты"]
+          "city": "Dubai",
+          "country": "United Arab Emirates",
+          "acceptCity": [
+            "Dubai",
+            "Dubay",
+            "Дубай",
+            "Дубаи",
+            "Dubai City",
+            "Dubai, UAE",
+            "Dubai UAE",
+            "DXB",
+            "Deira",
+            "Burj Dubai"
+          ],
+          "acceptCountry": [
+            "United Arab Emirates",
+            "UAE",
+            "U.A.E.",
+            "Emirates",
+            "ОАЭ",
+            "ОАЕ",
+            "Объединенные Арабские Эмираты",
+            "Об'єднані Арабські Емірати"
+          ]
         },
         {
           "image": "round_7_9.jpg",
-          "city": "Прага",
-          "country": "Чехия",
-          "acceptCity": ["Prague"],
-          "acceptCountry": ["Czech Republic", "Czechia", "Чехия"]
+          "city": "Sydney",
+          "country": "Australia",
+          "acceptCity": [
+            "Sydney",
+            "Sidney",
+            "Сидней",
+            "Сідней",
+            "Sydney NSW",
+            "Sydney, Australia",
+            "Sydney Australia",
+            "SYD",
+            "Sydney City"
+          ],
+          "acceptCountry": [
+            "Australia",
+            "AU",
+            "AUS",
+            "Australija",
+            "Австралия",
+            "Австралія"
+          ]
         },
         {
           "image": "round_7_10.jpg",
-          "city": "Стамбул",
-          "country": "Турция",
-          "acceptCity": ["Istanbul"],
-          "acceptCountry": ["Turkey", "Türkiye"]
+          "city": "Milan",
+          "country": "Italy",
+          "acceptCity": [
+            "Milan",
+            "Milano",
+            "Милан",
+            "Milano Italy",
+            "Milano, Italy",
+            "Milano IT",
+            "MI",
+            "Milan City",
+            "Milano City"
+          ],
+          "acceptCountry": [
+            "Italy",
+            "Italia",
+            "IT",
+            "Италия",
+            "Італія"
+          ]
         }
-      ]
+      ],
+      "cityPoints": 3,
+      "countryPoints": 1,
+      "scoring": "3 балла за город, 1 балл за страну."
     },
     {
       "id": 8,
       "title": "Самая близкая цифра",
       "type": "closest",
       "questions": [
-        { "text": "Сколько костей у взрослого человека?", "answer": 206 },
-        { "text": "Сколько стран входит в ООН?", "answer": 193 },
-        { "text": "Сколько минут длится самый длинный фильм в истории («Логистика»)?", "answer": 51420 },
-        { "text": "Сколько километров от Земли до Луны (в среднем)?", "answer": 384400 },
-        { "text": "Сколько клавиш у стандартного фортепиано?", "answer": 88 },
-        { "text": "Сколько зубов у взрослого человека (если все на месте)?", "answer": 32 },
-        { "text": "Сколько дней в високосном году?", "answer": 366 },
-        { "text": "Примерно сколько языков на Земле?", "answer": 7000 },
-        { "text": "Сколько игроков в футбольной команде на поле?", "answer": 11 },
-        { "text": "Сколько часовых поясов в России?", "answer": 11 }
-      ]
+        {
+          "text": "Сколько костей у взрослого человека?",
+          "answer": 206
+        },
+        {
+          "text": "Сколько стран входит в ООН?",
+          "answer": 193
+        },
+        {
+          "text": "Сколько минут длится самый длинный фильм в истории («Логистика»)?",
+          "answer": 51420
+        },
+        {
+          "text": "Сколько километров от Земли до Луны (в среднем)?",
+          "answer": 384400
+        },
+        {
+          "text": "Сколько клавиш у стандартного фортепиано?",
+          "answer": 88
+        },
+        {
+          "text": "Сколько хромосом у человека в норме?",
+          "answer": 46
+        },
+        {
+          "text": "Сколько дней в високосном году?",
+          "answer": 366
+        },
+        {
+          "text": "Примерно сколько языков на Земле?",
+          "answer": 7000
+        },
+        {
+          "text": "Сколько лет длилась Столетняя война?",
+          "answer": 116
+        },
+        {
+          "text": "Сколько стран имеют монархию?",
+          "answer": 43
+        }
+      ],
+      "closestPoints": 3,
+      "scoring": "3 балла тому, кто ответил ближе всех (при одинаковых ответах — всем по 3)."
     },
     {
       "id": 9,
@@ -416,111 +1376,179 @@
       "imageFolder": "round9",
       "questions": [
         {
-          "images": ["round_9_1a.jpg", "round_9_1b.jpg"],
-          "options": ["Золото (1 г)", "Серебро (1 г)"],
-          "answer": "Золото (1 г)"
+          "images": [
+            "round_9_1a.jpg",
+            "round_9_1b.jpg"
+          ],
+          "options": [
+            "Биг Мак",
+            "Билет в кино (средняя цена)"
+          ],
+          "answer": "Билет в кино (средняя цена)"
         },
         {
-          "images": ["round_9_2a.jpg", "round_9_2b.jpg"],
-          "options": ["iPhone 15 Pro", "PlayStation 5"],
-          "answer": "iPhone 15 Pro"
+          "images": [
+            "round_9_2a.jpg",
+            "round_9_2b.jpg"
+          ],
+          "options": [
+            "Starbucks кофе",
+            "Литр бензина"
+          ],
+          "answer": "Starbucks кофе"
         },
         {
-          "images": ["round_9_3a.jpg", "round_9_3b.jpg"],
-          "options": ["Rolex Submariner", "Apple Watch Ultra"],
-          "answer": "Rolex Submariner"
+          "images": [
+            "round_9_3a.jpg",
+            "round_9_3b.jpg"
+          ],
+          "options": [
+            "Instagram пост Ronaldo",
+            "Ferrari"
+          ],
+          "answer": "Instagram пост Ronaldo"
         },
         {
-          "images": ["round_9_4a.jpg", "round_9_4b.jpg"],
-          "options": ["Бензин АИ-95 (л)", "Молоко (л)"],
-          "answer": "Бензин АИ-95 (л)"
+          "images": [
+            "round_9_4a.jpg",
+            "round_9_4b.png"
+          ],
+          "options": [
+            "Билет на финал ЛЧ",
+            "Год минимальной зарплаты в Украине"
+          ],
+          "answer": "Год минимальной зарплаты в Украине"
         },
         {
-          "images": ["round_9_5a.jpg", "round_9_5b.jpg"],
-          "options": ["Картошка (кг)", "Кофе (кг)"],
-          "answer": "Кофе (кг)"
+          "images": [
+            "round_9_5a.jpg",
+            "round_9_5b.jpg"
+          ],
+          "options": [
+            "Bitcoin",
+            "реклама Super Bowl (1 слот)"
+          ],
+          "answer": "реклама Super Bowl (1 слот)"
         },
         {
-          "images": ["round_9_6a.jpg", "round_9_6b.jpg"],
-          "options": ["Tesla Model 3", "Toyota Corolla"],
-          "answer": "Tesla Model 3"
+          "images": [
+            "round_9_6a.jpg",
+            "round_9_6b.jpg"
+          ],
+          "options": [
+            "Tesla Model Y",
+            "1 кг золота"
+          ],
+          "answer": "Tesla Model Y"
         },
         {
-          "images": ["round_9_7a.jpg", "round_9_7b.jpg"],
-          "options": ["Книга (твёрдый переплёт)", "Подписка Netflix (мес.)"],
-          "answer": "Подписка Netflix (мес.)"
+          "images": [
+            "round_9_7a.jpg",
+            "round_9_7b.jpg"
+          ],
+          "options": [
+            "такси в Лондоне за месяц",
+            "авиабилет Европа–Азия"
+          ],
+          "answer": "авиабилет Европа–Азия"
         },
         {
-          "images": ["round_9_8a.jpg", "round_9_8b.jpg"],
-          "options": ["Шампанское Moët", "Пиво крафт (0,5 л)"],
-          "answer": "Шампанское Moët"
+          "images": [
+            "round_9_8a.jpg",
+            "round_9_8b.png"
+          ],
+          "options": [
+            "Uber в Дубае",
+            "AirPods Max"
+          ],
+          "answer": "AirPods Max"
         },
         {
-          "images": ["round_9_9a.jpg", "round_9_9b.jpg"],
-          "options": ["Lego набор коллекционный", "Настольная игра"],
-          "answer": "Lego набор коллекционный"
+          "images": [
+            "round_9_9a.jpg",
+            "round_9_9b.jpg"
+          ],
+          "options": [
+            "Netflix подписка на 100 лет",
+            "квартира в Киеве"
+          ],
+          "answer": "квартира в Киеве"
         },
         {
-          "images": ["round_9_10a.jpg", "round_9_10b.jpg"],
-          "options": ["Билет в кино", "Билет на концерт"],
-          "answer": "Билет на концерт"
+          "images": [
+            "round_9_10a.jpg",
+            "round_9_10b.jpg"
+          ],
+          "options": [
+            "туалетная бумага (год поставок ресторана)",
+            "ужин в Michelin ресторане"
+          ],
+          "answer": "ужин в Michelin ресторане"
         }
-      ]
+      ],
+      "questionPoints": 0.5,
+      "scoring": "0,5 балла за каждый правильный выбор."
     },
     {
       "id": 10,
       "title": "Очень плохие отзывы",
-      "type": "badreview",
+      "type": "reviewmatch",
+      "imageFolder": "round10",
+      "matchPoints": 0.5,
+      "description": "10 скринов отзывов и 10 мест. Игроки по очереди сопоставляют отзыв с местом — каждое место можно выбрать только один раз.",
+      "scoring": "0,5 балла за каждое верное сопоставление.",
+      "places": [
+        "Кафе 'Біля Каміну'",
+        "Стадион 'Локомотив'",
+        "Шашлык Маркет",
+        "Заправка Okko",
+        "Пузата Хата",
+        "Пиво на разлив 'Напарники'",
+        "Водоканал",
+        "City Mall",
+        "ЗНТУ",
+        "Радуга"
+      ],
       "questions": [
         {
-          "quote": "«Пришёл, заказал суп. Суп оказался жидким.»",
-          "options": ["ресторан", "автомойка", "музей", "гостиница"],
-          "answer": "ресторан"
+          "image": "round_10_1.png",
+          "answer": "ЗНТУ"
         },
         {
-          "quote": "«Машина всё ещё грязная, но теперь ещё и мокрая.»",
-          "options": ["ресторан", "автомойка", "музей", "гостиница"],
-          "answer": "автомойка"
+          "image": "round_10_2.png",
+          "answer": "Радуга"
         },
         {
-          "quote": "«Экспонаты интересные, но я не понял, где выход. Провёл в зале 4 часа.»",
-          "options": ["ресторан", "автомойка", "музей", "гостиница"],
-          "answer": "музей"
+          "image": "round_10_3.png",
+          "answer": "Пузата Хата"
         },
         {
-          "quote": "«Кровать была мягкой. Проснулся в другом номере.»",
-          "options": ["ресторан", "автомойка", "музей", "гостиница"],
-          "answer": "гостиница"
+          "image": "round_10_4.png",
+          "answer": "Водоканал"
         },
         {
-          "quote": "«Официант принёс счёт до того, как я успел открыть меню.»",
-          "options": ["ресторан", "автомойка", "музей", "гостиница"],
-          "answer": "ресторан"
+          "image": "round_10_5.png",
+          "answer": "Кафе 'Біля Каміну'"
         },
         {
-          "quote": "«Пылесос работал так громко, что машина теперь знает все мои секреты.»",
-          "options": ["ресторан", "автомойка", "музей", "гостиница"],
-          "answer": "автомойка"
+          "image": "round_10_6.png",
+          "answer": "Пиво на разлив 'Напарники'"
         },
         {
-          "quote": "«Картина красивая, но смотреть на неё 600 лет — перебор.»",
-          "options": ["ресторан", "автомойка", "музей", "гостиница"],
-          "answer": "музей"
+          "image": "round_10_7.png",
+          "answer": "Стадион 'Локомотив'"
         },
         {
-          "quote": "«Wi-Fi отличный. Сна — нет.»",
-          "options": ["ресторан", "автомойка", "музей", "гостиница"],
-          "answer": "гостиница"
+          "image": "round_10_8.png",
+          "answer": "Шашлык Маркет"
         },
         {
-          "quote": "«Пицца приехала холодной. Зато быстро.»",
-          "options": ["ресторан", "автомойка", "музей", "гостиница"],
-          "answer": "ресторан"
+          "image": "round_10_9.png",
+          "answer": "City Mall"
         },
         {
-          "quote": "«Пропылесосили салон, но забыли про меня внутри.»",
-          "options": ["ресторан", "автомойка", "музей", "гостиница"],
-          "answer": "автомойка"
+          "image": "round_10_10.png",
+          "answer": "Заправка Okko"
         }
       ]
     }

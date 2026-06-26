@@ -41,7 +41,7 @@ export default function Leaderboard({ data, title = "Рейтинг" }) {
                 <td>
                   <PlayerCell name={p.name} avatar={p.avatar} />
                 </td>
-                <td>{p.score}</td>
+                <td>{p.scoreLabel ?? p.score}</td>
               </tr>
             ))
           )}

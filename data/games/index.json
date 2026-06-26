@@ -1,17 +1,17 @@
 [
   {
-    "gameId": "6a69798e",
+    "gameId": "4d976d43",
     "quizTemplateId": "quiz1",
-    "title": "пт, 26 июня 2026 г. в 15:24",
-    "createdAt": "2026-06-26T12:24:05.778Z",
-    "updatedAt": "2026-06-26T12:24:05.779Z",
-    "status": "lobby",
-    "playerCount": 0,
-    "started": false,
-    "phase": "idle",
-    "currentRound": null,
-    "currentRoundTitle": "Вопросы с вариантами ответов",
+    "title": "пт, 26 июня 2026 г. в 19:19",
+    "createdAt": "2026-06-26T16:19:58.320Z",
+    "updatedAt": "2026-06-26T16:24:35.686Z",
+    "status": "active",
+    "playerCount": 2,
+    "started": true,
+    "phase": "question",
+    "currentRound": 3,
+    "currentRoundTitle": "Угадай песню",
     "totalRounds": 10,
-    "progressLabel": "Лобби — ожидание старта"
+    "progressLabel": "Раунд 3/10: Угадай песню · вопрос 2/10"
   }
 ]

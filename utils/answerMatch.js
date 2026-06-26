@@ -149,6 +149,27 @@ function parsePlaceAnswer(val) {
   return { city: "", country: "" };
 }
 
+function parseSongAnswer(val) {
+  if (val == null) return { title: "", artist: "" };
+  if (typeof val === "object") {
+    return {
+      title: String(val.title || "").trim(),
+      artist: String(val.artist || "").trim(),
+    };
+  }
+  if (typeof val === "string") {
+    try {
+      const parsed = JSON.parse(val);
+      if (parsed && typeof parsed === "object") {
+        return parseSongAnswer(parsed);
+      }
+    } catch {
+      /* plain string — ignore */
+    }
+  }
+  return { title: "", artist: "" };
+}
+
 function matchesPlaceField(playerValue, correct, acceptList, question) {
   if (!playerValue?.trim()) return false;
   const fakeQuestion = {
@@ -173,6 +194,27 @@ function scorePlaceAnswer(playerAnswer, question) {
   };
 }
 
+function matchesSongField(playerValue, correct, acceptList, question) {
+  if (!playerValue?.trim()) return false;
+  const fakeQuestion = {
+    answer: correct,
+    accept: acceptList || [],
+    match: question.match,
+    patterns: question.patterns,
+  };
+  return isAnswerCorrect(playerValue, fakeQuestion, "logic");
+}
+
+function scoreSongAnswer(playerAnswer, question) {
+  const { title, artist } = parseSongAnswer(playerAnswer);
+  const correctTitle = question.title || question.answer;
+  const correctArtist = question.artist;
+  return {
+    title: matchesSongField(title, correctTitle, question.acceptTitle, question),
+    artist: matchesSongField(artist, correctArtist, question.acceptArtist, question),
+  };
+}
+
 function isAnswerCorrect(playerAnswer, question, type) {
   if (playerAnswer == null || playerAnswer === "") return false;
 
@@ -180,7 +222,7 @@ function isAnswerCorrect(playerAnswer, question, type) {
     return normalize(playerAnswer) === normalize(question.answer);
   }
 
-  if (type === "place" || type === "closest") {
+  if (type === "place" || type === "closest" || type === "song") {
     return false;
   }
 
@@ -208,7 +250,9 @@ module.exports = {
   isChoiceType,
   parseNumericAnswer,
   parsePlaceAnswer,
+  parseSongAnswer,
   scorePlaceAnswer,
+  scoreSongAnswer,
   matchesCandidate,
   matchesPattern,
   getMatchConfig,

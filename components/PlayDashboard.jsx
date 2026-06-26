@@ -6,6 +6,7 @@ import QuestionCard from "./QuestionCard";
 import Timer from "./Timer";
 import Leaderboard from "./Leaderboard";
 import RoundIntroPanel from "./RoundIntroPanel";
+import ReviewMatchPanel from "./ReviewMatchPanel";
 
 const MAX_AVATAR_SIZE = 512 * 1024;
 
@@ -26,14 +27,22 @@ function applySessionSync(snap, setters) {
   } = setters;
 
   if (snap.currentQuestion) {
-    setQuestion(snap.currentQuestion);
+    const q = snap.currentQuestion;
+    const isMatch = q.type === "reviewmatch";
+    setQuestion(
+      isMatch && snap.playerId
+        ? { ...q, isYourTurn: q.activePlayer?.id === snap.playerId }
+        : q
+    );
     setRoundIntro(null);
     setRoundBreak(null);
     setRoundLeaderboard(null);
     setFinalLeaderboard(null);
-    setTimeLeft(60);
-    setAnswered(Boolean(snap.playerAnswered));
-    setStatusMsg(snap.playerAnswered ? "Ответ принят" : "");
+    setTimeLeft(isMatch ? 0 : 60);
+    setAnswered(
+      isMatch ? q.activePlayer?.id !== snap.playerId : Boolean(snap.playerAnswered)
+    );
+    setStatusMsg(snap.playerAnswered && !isMatch ? "Ответ принят" : "");
   } else if (snap.roundIntro) {
     setQuestion(null);
     setRoundIntro(snap.roundIntro);
@@ -200,11 +209,19 @@ export default function PlayDashboard({ gameId }) {
     };
     const onQuestion = (q) => {
       setRoundIntro(null);
-      setQuestion(q);
+      const enriched =
+        q?.type === "reviewmatch" && playerId
+          ? { ...q, isYourTurn: q.activePlayer?.id === playerId }
+          : q;
+      setQuestion(enriched);
       setRoundBreak(null);
       setRoundLeaderboard(null);
-      setTimeLeft(60);
-      setAnswered(false);
+      setTimeLeft(q?.type === "reviewmatch" ? 0 : 60);
+      setAnswered(
+        q?.type === "reviewmatch"
+          ? q.activePlayer?.id !== playerId
+          : false
+      );
       setStatusMsg("");
     };
     const onRoundComplete = (payload) => {
@@ -282,7 +299,7 @@ export default function PlayDashboard({ gameId }) {
       socket.off("roundLeaderboard", onRoundLeaderboard);
       socket.off("quizFinished", onQuizFinished);
     };
-  }, [socket, gameId]);
+  }, [socket, gameId, playerId]);
 
   useEffect(() => {
     if (timeLeft <= 0) return;
@@ -294,12 +311,27 @@ export default function PlayDashboard({ gameId }) {
 
   const handleAnswer = useCallback(
     (answer) => {
-      if (authState !== "joined" || answered || !question || timeLeft <= 0) return;
+      if (authState !== "joined" || !question) return;
+
+      if (question.type === "reviewmatch") {
+        if (!question.isYourTurn || answered) return;
+        socket.emit("submitAnswer", { gameId, playerId, answer });
+        setAnswered(true);
+        setStatusMsg("Выбор отправлен");
+        return;
+      }
+
+      if (answered || timeLeft <= 0) return;
       socket.emit("submitAnswer", { gameId, playerId, answer });
       setAnswered(true);
       setStatusMsg("Ответ принят");
     },
     [socket, gameId, playerId, authState, answered, question, timeLeft]
+  );
+
+  const handleMatchPick = useCallback(
+    (place) => handleAnswer(place),
+    [handleAnswer]
   );
 
   if (authState === "checking") {
@@ -363,10 +395,18 @@ export default function PlayDashboard({ gameId }) {
       ) : roundLeaderboard ? (
         <section>
           <h1>Раунд {roundLeaderboard.round} завершён</h1>
-          <p className="play-wait-hint">Ждите начала следующего раунда…</p>
+          <p className="play-wait-hint">
+            {roundLeaderboard.step === "round"
+              ? "Рейтинг за этот раунд"
+              : "Общий рейтинг за все пройденные раунды"}
+          </p>
           <Leaderboard
             data={roundLeaderboard.leaderboard}
-            title={`Рейтинг: ${roundLeaderboard.roundTitle}`}
+            title={
+              roundLeaderboard.step === "round"
+                ? `Раунд ${roundLeaderboard.round}: ${roundLeaderboard.roundTitle}`
+                : `Общий рейтинг · ${roundLeaderboard.round} раундов`
+            }
           />
         </section>
       ) : roundBreak ? (
@@ -385,16 +425,34 @@ export default function PlayDashboard({ gameId }) {
       ) : question ? (
         <section>
           <h1 className="play-round-title">{question.roundTitle}</h1>
-          <Timer seconds={timeLeft} total={60} />
-          <QuestionCard
-            question={question}
-            onSubmit={handleAnswer}
-            disabled={answered || timeLeft <= 0}
-          />
-          {timeLeft <= 0 && !answered && (
-            <p className="play-time-up">Время вышло</p>
+          {question.type === "reviewmatch" ? (
+            <>
+              <ReviewMatchPanel
+                data={question}
+                onPick={handleMatchPick}
+                disabled={answered || !question.isYourTurn}
+              />
+              {statusMsg && <p className="play-status-msg">{statusMsg}</p>}
+              {!question.isYourTurn && !answered && (
+                <p className="play-wait-hint">
+                  Сейчас ход {question.activePlayer?.name || "другого игрока"}
+                </p>
+              )}
+            </>
+          ) : (
+            <>
+              <Timer seconds={timeLeft} total={60} />
+              <QuestionCard
+                question={question}
+                onSubmit={handleAnswer}
+                disabled={answered || timeLeft <= 0}
+              />
+              {timeLeft <= 0 && !answered && (
+                <p className="play-time-up">Время вышло</p>
+              )}
+              {statusMsg && <p className="play-status-msg">{statusMsg}</p>}
+            </>
           )}
-          {statusMsg && <p className="play-status-msg">{statusMsg}</p>}
         </section>
       ) : (
         <section className="play-waiting">

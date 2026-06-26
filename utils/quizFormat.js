@@ -1,3 +1,8 @@
+const {
+  getSongTitlePoints,
+  getSongArtistPoints,
+} = require("./scoring");
+
 function imagePath(round, filename) {
   return `/quiz/${round.imageFolder}/${filename}`;
 }
@@ -40,6 +45,15 @@ function formatQuestion(round, question, questionIndex) {
     };
   }
 
+  if (round.type === "celebrity") {
+    return {
+      ...base,
+      text: question.prompt || "Угадай знаменитость в женской версии",
+      image: imagePath(round, question.image),
+      placeholder: question.placeholder || "Имя знаменитости",
+    };
+  }
+
   if (round.type === "cover") {
     return {
       ...base,
@@ -51,12 +65,31 @@ function formatQuestion(round, question, questionIndex) {
 
   if (round.type === "song") {
     const folder = round.audioFolder || round.mediaFolder || "round3";
-    return {
+    const clipSeconds = question.audioClipSeconds ?? round.audioClipSeconds;
+    const clipStart = question.audioClipStart ?? round.audioClipStart ?? 0;
+    const payload = {
       ...base,
-      text: "Угадайте песню или исполнителя по фрагменту",
+      text: "Угадайте песню и исполнителя по фрагменту",
       audio: `/quiz/${folder}/${question.audio}`,
-      placeholder: "Название песни или исполнителя",
+      dualInput: true,
+      dualFields: [
+        { key: "title", placeholder: "Название песни" },
+        { key: "artist", placeholder: "Название группы" },
+      ],
+      scoringHint: `Песня — ${getSongTitlePoints(round, question)} б. · Группа — ${getSongArtistPoints(round, question)} б.`,
     };
+    if (clipSeconds) {
+      payload.audioClip = {
+        start: clipStart,
+        duration: clipSeconds,
+        random: question.audioClipRandom ?? round.audioClipRandom ?? false,
+      };
+      payload.audioClipHint =
+        payload.audioClip.random
+          ? `Случайный фрагмент · ${clipSeconds} сек`
+          : `С ${clipStart} сек · ${clipSeconds} сек`;
+    }
+    return payload;
   }
 
   if (round.type === "brand") {
@@ -74,8 +107,10 @@ function formatQuestion(round, question, questionIndex) {
       text: "Угадайте место по фото",
       image: imagePath(round, question.image),
       dualInput: true,
-      cityPlaceholder: "Город",
-      countryPlaceholder: "Страна",
+      dualFields: [
+        { key: "city", placeholder: "Город" },
+        { key: "country", placeholder: "Страна" },
+      ],
       scoringHint: `Город — ${question.cityPoints ?? 3} б. · Страна — ${question.countryPoints ?? 1} б.`,
     };
   }
@@ -109,7 +144,40 @@ function formatQuestion(round, question, questionIndex) {
     };
   }
 
+  if (round.type === "reviewmatch") {
+    return formatReviewMatchPreview(round, question, questionIndex);
+  }
+
   return base;
+}
+
+function formatReviewMatchPreview(round, question, questionIndex) {
+  const places = (round.places || []).map((name) => ({
+    name,
+    used: false,
+    pickedBy: null,
+    correct: null,
+    wasCorrectAnswer: false,
+  }));
+
+  return {
+    type: "reviewmatch",
+    round: round.id,
+    roundTitle: round.title,
+    questionNumber: questionIndex + 1,
+    totalInRound: round.questions.length,
+    reviewNumber: questionIndex + 1,
+    totalReviews: round.questions.length,
+    text: "Сопоставьте отзыв с местом",
+    image: question.image ? imagePath(round, question.image) : null,
+    places,
+    availablePlaces: round.places || [],
+    activePlayer: null,
+    isYourTurn: false,
+    matchHistory: [],
+    previewMode: true,
+    scoringHint: `${round.matchPoints ?? 1} б. за верное сопоставление`,
+  };
 }
 
 function formatReviewQuestion(round, question, questionIndex, answerBreakdown) {
@@ -127,6 +195,13 @@ function formatReviewQuestion(round, question, questionIndex, answerBreakdown) {
     review.scoringHint = `Город — ${question.cityPoints ?? 3} б. · Страна — ${question.countryPoints ?? 1} б.`;
     if (question.acceptCity?.length) review.acceptCity = question.acceptCity;
     if (question.acceptCountry?.length) review.acceptCountry = question.acceptCountry;
+  } else if (round.type === "song") {
+    review.correctTitle = question.title || question.answer;
+    review.correctArtist = question.artist;
+    review.correctAnswer = `${review.correctTitle} — ${review.correctArtist}`;
+    review.scoringHint = `Песня — ${question.titlePoints ?? 1} б. · Группа — ${question.artistPoints ?? 1} б.`;
+    if (question.acceptTitle?.length) review.acceptTitle = question.acceptTitle;
+    if (question.acceptArtist?.length) review.acceptArtist = question.acceptArtist;
   } else if (round.type === "closest") {
     review.correctAnswer = String(question.answer);
     if (question.unit) review.correctAnswer += ` ${question.unit}`;
@@ -134,6 +209,11 @@ function formatReviewQuestion(round, question, questionIndex, answerBreakdown) {
   } else if (round.type === "badreview") {
     review.correctAnswer = question.answer;
     review.quote = question.quote || question.text;
+  } else if (round.type === "reviewmatch") {
+    review.correctAnswer = question.answer;
+    review.text = "Правильное место для этого отзыва";
+    if (question.image) review.image = imagePath(round, question.image);
+    review.places = round.places || [];
   } else {
     review.correctAnswer = question.answer;
   }
@@ -167,16 +247,19 @@ const ROUND_TYPE_LABELS = {
   movie: "Фильм",
   song: "Песня",
   brand: "Бренд",
+  celebrity: "Знаменитость",
   place: "Место",
   closest: "Цифра",
   pricier: "Цена",
   badreview: "Отзыв",
+  reviewmatch: "Сопоставление",
   cover: "Обложка",
 };
 
 module.exports = {
   formatQuestion,
   formatReviewQuestion,
+  formatReviewMatchPreview,
   getQuestionLabel,
   ROUND_TYPE_LABELS,
 };

@@ -60,6 +60,9 @@ function getProgressLabel(game) {
     case "question": {
       const qNum = (game.currentQuestionIndex ?? 0) + 1;
       const totalQ = round?.questions?.length || 0;
+      if (round?.type === "reviewmatch") {
+        return `Раунд ${roundNum}/${totalRounds}: ${roundTitle} · отзыв ${qNum}/${totalQ}`;
+      }
       return `Раунд ${roundNum}/${totalRounds}: ${roundTitle} · вопрос ${qNum}/${totalQ}`;
     }
     case "round_complete":
@@ -270,13 +273,7 @@ function createGame(quizTemplateId, quizData) {
     status: "lobby",
     players: {},
     rounds: quizData.rounds.map((round) => ({
-      id: round.id,
-      title: round.title,
-      type: round.type,
-      description: round.description || null,
-      scoring: round.scoring || null,
-      imageFolder: round.imageFolder || null,
-      audioFolder: round.audioFolder || null,
+      ...round,
       questions: round.questions.map((q) => ({ ...q })),
     })),
     currentRoundIndex: 0,

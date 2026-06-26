@@ -398,6 +398,21 @@ a:hover {
   height: 48px;
 }
 
+.question-audio-element {
+  display: none;
+}
+
+.question-audio-clip-controls {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.question-audio-play-btn {
+  min-width: 12rem;
+}
+
 .question-audio-label {
   font-size: 0.8rem;
   opacity: 0.65;
@@ -1463,5 +1478,314 @@ a:hover {
   .quiz-preview-nav {
     max-height: none;
     position: static;
+  }
+}
+
+.quiz-player-item--active-turn {
+  outline: 2px solid rgba(255, 214, 102, 0.85);
+  outline-offset: 2px;
+  background: rgba(255, 214, 102, 0.08);
+}
+
+.review-match-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.review-match-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 240px;
+  gap: 1.25rem;
+  align-items: start;
+}
+
+.review-match-main {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.review-match-turn {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  padding: 0.85rem 1rem;
+  border-radius: 12px;
+  background: rgba(255, 214, 102, 0.1);
+  border: 1px solid rgba(255, 214, 102, 0.25);
+}
+
+.review-match-turn-avatar,
+.review-match-turn-avatar-fallback {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.review-match-turn-avatar-fallback {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.12);
+  font-weight: 700;
+}
+
+.review-match-turn-label {
+  display: block;
+  font-size: 0.75rem;
+  opacity: 0.7;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.review-match-turn-name {
+  font-size: 1.15rem;
+}
+
+.review-match-review-card {
+  position: relative;
+  border-radius: 16px;
+  overflow: hidden;
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.review-match-review-badge {
+  position: absolute;
+  top: 0.75rem;
+  left: 0.75rem;
+  z-index: 1;
+  padding: 0.25rem 0.65rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  background: rgba(0, 0, 0, 0.55);
+}
+
+.review-match-image {
+  display: block;
+  width: 100%;
+  max-height: 420px;
+  object-fit: contain;
+  background: #111;
+}
+
+.review-match-image-placeholder {
+  min-height: 220px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 1.5rem;
+  text-align: center;
+  opacity: 0.75;
+}
+
+.review-match-hint {
+  margin: 0;
+  text-align: center;
+  opacity: 0.85;
+}
+
+.review-match-places {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.65rem;
+}
+
+.review-match-place {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.15rem;
+  padding: 0.85rem 0.95rem;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.04);
+  color: inherit;
+  text-align: left;
+  cursor: default;
+  transition: transform 0.15s ease, border-color 0.15s ease, background 0.15s ease;
+}
+
+.review-match-place--active {
+  cursor: pointer;
+  border-color: rgba(120, 190, 255, 0.45);
+  background: rgba(120, 190, 255, 0.08);
+}
+
+.review-match-place--active:hover:not(:disabled) {
+  transform: translateY(-2px);
+  border-color: rgba(120, 190, 255, 0.75);
+}
+
+.review-match-place--used {
+  opacity: 0.55;
+}
+
+.review-match-place--correct {
+  border-color: rgba(92, 214, 124, 0.45);
+  background: rgba(92, 214, 124, 0.08);
+}
+
+.review-match-place--wrong {
+  border-color: rgba(255, 120, 120, 0.35);
+  background: rgba(255, 120, 120, 0.06);
+}
+
+.review-match-place-icon {
+  font-size: 1.25rem;
+}
+
+.review-match-place-name {
+  font-weight: 600;
+}
+
+.review-match-place-meta {
+  font-size: 0.78rem;
+  opacity: 0.8;
+}
+
+.review-match-history {
+  padding: 0.85rem;
+  border-radius: 12px;
+  background: rgba(0, 0, 0, 0.22);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.review-match-history-title {
+  margin: 0 0 0.65rem;
+  font-size: 0.85rem;
+  opacity: 0.75;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.review-match-history-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.review-match-history-item {
+  display: flex;
+  gap: 0.5rem;
+  align-items: baseline;
+  font-size: 0.85rem;
+  padding: 0.35rem 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.review-match-history-item:last-child {
+  border-bottom: none;
+}
+
+.review-match-history-num {
+  opacity: 0.55;
+  min-width: 1.5rem;
+}
+
+.review-match-feedback {
+  position: fixed;
+  left: 50%;
+  bottom: 1.5rem;
+  transform: translateX(-50%);
+  z-index: 40;
+  min-width: 260px;
+  padding: 0.85rem 1rem;
+  border-radius: 12px;
+  text-align: center;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
+  animation: review-match-pop 0.25s ease;
+}
+
+.review-match-feedback--ok {
+  background: rgba(34, 120, 60, 0.95);
+}
+
+.review-match-feedback--bad {
+  background: rgba(140, 40, 40, 0.95);
+}
+
+.review-match-feedback-title {
+  display: block;
+  font-weight: 700;
+  margin-bottom: 0.25rem;
+}
+
+.review-match-feedback-answer {
+  margin: 0.35rem 0 0;
+  font-size: 0.85rem;
+  opacity: 0.9;
+}
+
+.review-match-summary-grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 0.85rem;
+}
+
+.review-match-summary-card {
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(0, 0, 0, 0.22);
+}
+
+.review-match-summary-card--ok {
+  border-color: rgba(92, 214, 124, 0.35);
+}
+
+.review-match-summary-card--bad {
+  border-color: rgba(255, 120, 120, 0.35);
+}
+
+.review-match-summary-body {
+  padding: 0.75rem 0.85rem 0.9rem;
+}
+
+.review-match-review-num {
+  font-size: 0.75rem;
+  opacity: 0.6;
+}
+
+.review-match-summary-place {
+  margin: 0.25rem 0;
+  font-weight: 600;
+}
+
+.review-match-summary-pick {
+  margin: 0;
+  font-size: 0.85rem;
+  opacity: 0.85;
+}
+
+@keyframes review-match-pop {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+@media (max-width: 900px) {
+  .review-match-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .review-match-places {
+    grid-template-columns: 1fr;
   }
 }

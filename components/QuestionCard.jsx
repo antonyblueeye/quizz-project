@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 function QuestionImage({ src, alt }) {
   const [failed, setFailed] = useState(false);
@@ -24,9 +24,88 @@ function QuestionImage({ src, alt }) {
   );
 }
 
-function QuestionAudio({ src }) {
+function QuestionAudio({ src, clip, hint }) {
+  const audioRef = useRef(null);
+  const clipRef = useRef({ start: 0, duration: 20 });
   const [failed, setFailed] = useState(false);
+  const [ready, setReady] = useState(false);
+  const [playing, setPlaying] = useState(false);
   const filename = src.split("/").pop();
+  const hasClip = Boolean(clip?.duration);
+
+  useEffect(() => {
+    clipRef.current = {
+      start: clip?.start ?? 0,
+      duration: clip?.duration ?? 20,
+    };
+    setReady(false);
+    setPlaying(false);
+  }, [src, clip?.start, clip?.duration]);
+
+  const clampStart = (fileDuration) => {
+    const { start, duration } = clipRef.current;
+    const maxStart = Math.max(0, fileDuration - duration);
+    return Math.min(Math.max(0, start), maxStart);
+  };
+
+  const seekToClipStart = () => {
+    const el = audioRef.current;
+    if (!el || !Number.isFinite(el.duration)) return;
+    const start = hasClip ? clampStart(el.duration) : 0;
+    clipRef.current.start = start;
+    el.currentTime = start;
+  };
+
+  const handleLoadedMetadata = () => {
+    seekToClipStart();
+    setReady(true);
+  };
+
+  const handlePlay = () => {
+    seekToClipStart();
+    setPlaying(true);
+  };
+
+  const handlePause = () => {
+    setPlaying(false);
+  };
+
+  const handleTimeUpdate = () => {
+    stopIfPastClipEnd();
+  };
+
+  const stopIfPastClipEnd = () => {
+    if (!hasClip) return;
+    const el = audioRef.current;
+    if (!el) return;
+    const { start, duration } = clipRef.current;
+    const end = start + duration;
+    if (el.currentTime < start - 0.05) {
+      el.currentTime = start;
+    }
+    if (el.currentTime >= end - 0.05) {
+      el.pause();
+      el.currentTime = start;
+      setPlaying(false);
+    }
+  };
+
+  useEffect(() => {
+    if (!hasClip || !playing) return undefined;
+    const timer = setInterval(stopIfPastClipEnd, 200);
+    return () => clearInterval(timer);
+  }, [hasClip, playing, src, clip?.start, clip?.duration]);
+
+  const handleListen = async () => {
+    const el = audioRef.current;
+    if (!el) return;
+    seekToClipStart();
+    try {
+      await el.play();
+    } catch {
+      /* autoplay policy or missing file */
+    }
+  };
 
   if (failed) {
     return (
@@ -40,14 +119,35 @@ function QuestionAudio({ src }) {
   return (
     <div className="question-audio">
       <audio
+        ref={audioRef}
         key={src}
         src={src}
-        controls
         preload="metadata"
-        className="question-audio-player"
+        className={hasClip ? "question-audio-element" : "question-audio-player"}
+        controls={!hasClip}
+        onLoadedMetadata={handleLoadedMetadata}
+        onPlay={handlePlay}
+        onPause={handlePause}
+        onTimeUpdate={handleTimeUpdate}
         onError={() => setFailed(true)}
       />
-      <span className="question-audio-label">{filename}</span>
+      {hasClip ? (
+        <div className="question-audio-clip-controls">
+          <button
+            type="button"
+            className="button question-audio-play-btn"
+            onClick={handleListen}
+            disabled={!ready}
+          >
+            {playing ? "▶ Играет…" : "▶ Слушать фрагмент"}
+          </button>
+          <span className="question-audio-label">
+            {hint || `Фрагмент · ${clip.duration} сек`}
+          </span>
+        </div>
+      ) : (
+        <span className="question-audio-label">{filename}</span>
+      )}
     </div>
   );
 }
@@ -112,6 +212,30 @@ function ReviewAnswerGroups({ groups }) {
   );
 }
 
+function ReviewDualFieldBlock({
+  label,
+  correctValue,
+  acceptAlternatives,
+  correctPlayers,
+  groups,
+  scoringHint,
+}) {
+  return (
+    <div>
+      <span className="question-review-label">{label}</span>
+      <p className="question-review-value">{correctValue}</p>
+      <AnswerAvatars players={correctPlayers} />
+      {groups?.length > 0 && (
+        <ReviewAnswerGroups groups={groups.filter((g) => !g.isCorrect)} />
+      )}
+      {acceptAlternatives?.length > 0 && (
+        <p className="question-review-alts">Также: {acceptAlternatives.join(", ")}</p>
+      )}
+      {scoringHint && <p className="question-review-alts">{scoringHint}</p>}
+    </div>
+  );
+}
+
 function ReviewClosestWinners({ breakdown }) {
   const winners = breakdown?.closestWinners || [];
   if (!winners.length) {
@@ -139,15 +263,13 @@ export default function QuestionCard({
   showMeta = true,
 }) {
   const [answer, setAnswer] = useState("");
-  const [city, setCity] = useState("");
-  const [country, setCountry] = useState("");
+  const [dualValues, setDualValues] = useState({});
 
   const questionKey = `${question.round}-${question.questionNumber}-${question.reviewMode ? "r" : "q"}`;
 
   useEffect(() => {
     setAnswer("");
-    setCity("");
-    setCountry("");
+    setDualValues({});
   }, [questionKey]);
 
   const isReview = Boolean(question.reviewMode);
@@ -155,18 +277,29 @@ export default function QuestionCard({
     CHOICE_TYPES.has(question.type) && question.options?.length > 0;
   const isTrueFalse = question.type === "truefalse";
   const isBadReview = question.type === "badreview";
-  const isDualInput = question.dualInput;
+  const dualFields = question.dualFields;
+  const isDualInput = Boolean(dualFields?.length);
   const isNumeric = question.numeric;
+
+  const handleDualFieldChange = (key, value) => {
+    setDualValues((prev) => ({ ...prev, [key]: value }));
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
     if (disabled) return;
 
     if (isDualInput) {
-      if (!city.trim() && !country.trim()) return;
-      onSubmit({ city: city.trim(), country: country.trim() });
-      setCity("");
-      setCountry("");
+      const payload = {};
+      let hasAny = false;
+      for (const field of dualFields) {
+        const value = String(dualValues[field.key] || "").trim();
+        payload[field.key] = value;
+        if (value) hasAny = true;
+      }
+      if (!hasAny) return;
+      onSubmit(payload);
+      setDualValues({});
       return;
     }
 
@@ -213,7 +346,13 @@ export default function QuestionCard({
         <QuestionImage src={question.image} alt={question.text} />
       )}
 
-      {question.audio && <QuestionAudio src={question.audio} />}
+      {question.audio && (
+        <QuestionAudio
+          src={question.audio}
+          clip={question.audioClip}
+          hint={question.audioClipHint}
+        />
+      )}
 
       {isReview && isChoice ? (
         <div
@@ -245,36 +384,40 @@ export default function QuestionCard({
         </div>
       ) : isReview && question.type === "place" ? (
         <div className="question-review-answer question-review-answer--place">
-          <div>
-            <span className="question-review-label">Город</span>
-            <p className="question-review-value">{question.correctCity}</p>
-            <AnswerAvatars players={breakdown?.cityCorrectPlayers} />
-            {breakdown?.cityGroups?.length > 0 && (
-              <ReviewAnswerGroups
-                groups={breakdown.cityGroups.filter((g) => !g.isCorrect)}
-              />
-            )}
-            {question.acceptCity?.length > 0 && (
-              <p className="question-review-alts">
-                Также: {question.acceptCity.join(", ")}
-              </p>
-            )}
-          </div>
-          <div>
-            <span className="question-review-label">Страна</span>
-            <p className="question-review-value">{question.correctCountry}</p>
-            <AnswerAvatars players={breakdown?.countryCorrectPlayers} />
-            {breakdown?.countryGroups?.length > 0 && (
-              <ReviewAnswerGroups
-                groups={breakdown.countryGroups.filter((g) => !g.isCorrect)}
-              />
-            )}
-            {question.acceptCountry?.length > 0 && (
-              <p className="question-review-alts">
-                Также: {question.acceptCountry.join(", ")}
-              </p>
-            )}
-          </div>
+          <ReviewDualFieldBlock
+            label="Город"
+            correctValue={question.correctCity}
+            acceptAlternatives={question.acceptCity}
+            correctPlayers={breakdown?.cityCorrectPlayers}
+            groups={breakdown?.cityGroups}
+          />
+          <ReviewDualFieldBlock
+            label="Страна"
+            correctValue={question.correctCountry}
+            acceptAlternatives={question.acceptCountry}
+            correctPlayers={breakdown?.countryCorrectPlayers}
+            groups={breakdown?.countryGroups}
+          />
+          {question.scoringHint && (
+            <p className="question-review-alts">{question.scoringHint}</p>
+          )}
+        </div>
+      ) : isReview && question.type === "song" ? (
+        <div className="question-review-answer question-review-answer--place">
+          <ReviewDualFieldBlock
+            label="Песня"
+            correctValue={question.correctTitle}
+            acceptAlternatives={question.acceptTitle}
+            correctPlayers={breakdown?.titleCorrectPlayers}
+            groups={breakdown?.titleGroups}
+          />
+          <ReviewDualFieldBlock
+            label="Группа"
+            correctValue={question.correctArtist}
+            acceptAlternatives={question.acceptArtist}
+            correctPlayers={breakdown?.artistCorrectPlayers}
+            groups={breakdown?.artistGroups}
+          />
           {question.scoringHint && (
             <p className="question-review-alts">{question.scoringHint}</p>
           )}
@@ -343,28 +486,25 @@ export default function QuestionCard({
         </div>
       ) : isDualInput ? (
         <form onSubmit={handleSubmit} className="question-dual-form">
-          <input
-            type="text"
-            value={city}
-            onChange={(e) => setCity(e.target.value)}
-            placeholder={question.cityPlaceholder || "Город"}
-            className="question-text-input"
-            disabled={disabled}
-            autoComplete="off"
-          />
-          <input
-            type="text"
-            value={country}
-            onChange={(e) => setCountry(e.target.value)}
-            placeholder={question.countryPlaceholder || "Страна"}
-            className="question-text-input"
-            disabled={disabled}
-            autoComplete="off"
-          />
+          {dualFields.map((field) => (
+            <input
+              key={field.key}
+              type="text"
+              value={dualValues[field.key] || ""}
+              onChange={(e) => handleDualFieldChange(field.key, e.target.value)}
+              placeholder={field.placeholder}
+              className="question-text-input"
+              disabled={disabled}
+              autoComplete="off"
+            />
+          ))}
           <button
             type="submit"
             className="button"
-            disabled={disabled || (!city.trim() && !country.trim())}
+            disabled={
+              disabled ||
+              !dualFields.some((field) => String(dualValues[field.key] || "").trim())
+            }
           >
             Ответить
           </button>

@@ -3,6 +3,7 @@
 import { useCallback, useMemo, useState } from "react";
 import Link from "next/link";
 import QuestionCard from "./QuestionCard";
+import ReviewMatchPanel from "./ReviewMatchPanel";
 import {
   formatQuestion,
   formatReviewQuestion,
@@ -175,12 +176,32 @@ export default function QuizStructurePreview({
           </div>
 
           {previewQuestion ? (
-            <QuestionCard
-              question={previewQuestion}
-              onSubmit={() => {}}
-              disabled
-              showMeta
-            />
+            previewQuestion.type === "reviewmatch" ? (
+              reviewMode ? (
+                <div className="question-card question-card--review">
+                  {previewQuestion.image && (
+                    <img
+                      src={previewQuestion.image}
+                      alt=""
+                      className="review-match-image"
+                    />
+                  )}
+                  <div className="question-review-answer">
+                    <span className="question-review-label">Правильное место</span>
+                    <p className="question-review-value">{previewQuestion.correctAnswer}</p>
+                  </div>
+                </div>
+              ) : (
+                <ReviewMatchPanel data={previewQuestion} disabled showMeta />
+              )
+            ) : (
+              <QuestionCard
+                question={previewQuestion}
+                onSubmit={() => {}}
+                disabled
+                showMeta
+              />
+            )
           ) : (
             <p className="quiz-empty-hint">Выберите вопрос слева</p>
           )}
