@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "node server.js",
     "build": "next build",
-    "start": "next start",
+    "start": "node scripts/serve-production.js",
+    "serve": "npm run build && node scripts/serve-production.js",
     "lint": "eslint"
   },
   "dependencies": {

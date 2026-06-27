@@ -1,22 +1,15 @@
 {
-  "gameId": "4d976d43",
+  "gameId": "c50635fa",
   "quizTemplateId": "quiz1",
-  "title": "пт, 26 июня 2026 г. в 19:19",
-  "createdAt": "2026-06-26T16:19:58.320Z",
-  "updatedAt": "2026-06-26T16:24:35.686Z",
+  "title": "сб, 27 июня 2026 г. в 02:57",
+  "createdAt": "2026-06-26T23:57:19.955Z",
+  "updatedAt": "2026-06-27T07:29:13.454Z",
   "status": "active",
   "players": {
-    "92897f22-c372-4075-ad18-fb51dd30894a": {
-      "name": "Купитман",
-      "socketId": null,
-      "score": 11,
-      "answer": null,
-      "avatar": null
-    },
-    "6d65f64e-4301-4633-a49e-6314243ed988": {
-      "name": "Жиган",
-      "socketId": null,
-      "score": 8,
+    "659802f5-5db6-4d28-a124-5627c35b3357": {
+      "name": "Гусь",
+      "socketId": "m3aMzOXCyMekLdP0AAAa",
+      "score": 0.5,
       "answer": null,
       "avatar": null
     }
@@ -127,7 +120,9 @@
           ],
           "answer": "Казахстан"
         }
-      ]
+      ],
+      "questionPoints": 0.5,
+      "scoring": "0,5 балла за каждый правильный ответ."
     },
     {
       "id": 2,
@@ -394,16 +389,18 @@
             "fuzzy": true
           }
         }
-      ]
+      ],
+      "questionPoints": 1,
+      "scoring": "1 балл за каждый правильный ответ."
     },
     {
       "id": 3,
       "title": "Угадай песню",
       "type": "song",
       "audioFolder": "round3",
-      "audioClipSeconds": 20,
-      "audioClipRandom": true,
-      "defaultAudioDuration": 240,
+      "audioClipSeconds": 45,
+      "audioClipRandom": false,
+      "audioClipStart": 20,
       "questions": [
         {
           "audio": "round_3_1.mp3",
@@ -685,7 +682,10 @@
             "fuzzy": true
           }
         }
-      ]
+      ],
+      "titlePoints": 3,
+      "artistPoints": 1,
+      "scoring": "3 балла за название песни, 1 балл за группу (исполнителя)."
     },
     {
       "id": 4,
@@ -732,14 +732,16 @@
           "text": "Человек может “перегрузить память”, если за один день выучит слишком много нового.",
           "answer": "Ложь"
         }
-      ]
+      ],
+      "questionPoints": 0.5,
+      "scoring": "0,5 балла за каждый правильный ответ."
     },
     {
       "id": 5,
       "title": "Угадай язык",
       "type": "choice",
       "description": "10 фраз на разных языках. Прочитайте текст и выберите, на каком языке написана фраза.",
-      "scoring": "1 балл за каждый правильно угаданный язык.",
+      "scoring": "1 балл за каждый правильный ответ.",
       "questions": [
         {
           "text": "Біз әр күн сайын таңертең суық кофе ішпей, жылы шай ішкенді жөн көреміз, себебі ол денсаулыққа пайдалы деп санаймыз.",
@@ -841,89 +843,233 @@
           ],
           "answer": "Ирландский"
         }
-      ]
+      ],
+      "questionPoints": 1
     },
     {
       "id": 6,
-      "title": "Угадай бренд по логотипу",
-      "type": "brand",
+      "title": "Угадай знаменитость",
+      "type": "celebrity",
       "imageFolder": "round6",
+      "description": "На фото — известная личность, «переведённая» в женскую версию. Напишите, кто это на самом деле.",
+      "scoring": "1 балл за каждый правильный ответ.",
       "questions": [
         {
-          "image": "round_6_1.jpg",
-          "answer": "Apple",
+          "image": "round_6_1.png",
+          "answer": "Илон Маск",
           "accept": [
-            "Эпл",
-            "Apple Inc"
-          ]
+            "Elon Musk",
+            "Маск"
+          ],
+          "match": {
+            "fuzzy": true
+          }
         },
         {
-          "image": "round_6_2.jpg",
-          "answer": "Nike",
+          "image": "round_6_2.png",
+          "answer": "Криштиану Роналду",
           "accept": [
-            "Найк"
-          ]
+            "Cristiano Ronaldo",
+            "Cristiano Ronaldo dos Santos Aveiro",
+            "Cristiano",
+            "Ronaldo",
+            "CR7",
+            "Cristiano CR7",
+            "Cristiano Ronaldo CR7",
+            "Криштиану Роналду",
+            "Криштиано Роналду",
+            "Криштіану Роналду",
+            "Криштиано",
+            "Криштіано",
+            "Роналду",
+            "Рональдо",
+            "Кріштіану Роналду",
+            "Криштиану Рональдо",
+            "Криштиано Рональдо"
+          ],
+          "match": {
+            "fuzzy": true
+          }
         },
         {
-          "image": "round_6_3.jpg",
-          "answer": "McDonald's",
+          "image": "round_6_3.png",
+          "answer": "Джонни Депп",
           "accept": [
-            "Макдоналдс",
-            "McDonalds"
-          ]
+            "Johnny Depp",
+            "Johnny",
+            "Depp",
+            "John Depp",
+            "Jonny Depp",
+            "Jhonny Depp",
+            "Johnny Deep",
+            "Джонни Депп",
+            "Джони Депп",
+            "Джонни Деп",
+            "Джони Деп",
+            "Депп",
+            "Деп"
+          ],
+          "match": {
+            "fuzzy": true
+          }
         },
         {
-          "image": "round_6_4.jpg",
-          "answer": "Starbucks",
+          "image": "round_6_4.png",
+          "answer": "Альберт Эйнштейн",
           "accept": [
-            "Старбакс"
-          ]
+            "Albert Einstein",
+            "Albert",
+            "Einstein",
+            "A. Einstein",
+            "Альберт Эйнштейн",
+            "Альберт Ейнштейн",
+            "Альберт Энштейн",
+            "Альберт Эйнштэйн",
+            "Альберт",
+            "Эйнштейн",
+            "Ейнштейн",
+            "Энштейн",
+            "Енштейн"
+          ],
+          "match": {
+            "fuzzy": true
+          }
         },
         {
-          "image": "round_6_5.jpg",
-          "answer": "Adidas",
+          "image": "round_6_5.png",
+          "answer": "Фредди Меркьюри",
           "accept": [
-            "Адидас"
-          ]
+            "Freddie Mercury",
+            "Freddy Mercury",
+            "Freddie",
+            "Mercury",
+            "F. Mercury",
+            "Фредди Меркьюри",
+            "Фредди Меркюри",
+            "Фредди Меркури",
+            "Фреди Меркьюри",
+            "Фреди Меркури",
+            "Меркьюри",
+            "Меркьюри",
+            "Меркури",
+            "Меркюри"
+          ],
+          "match": {
+            "fuzzy": true
+          }
         },
         {
-          "image": "round_6_6.jpg",
-          "answer": "Google",
+          "image": "round_6_6.png",
+          "answer": "Юрий Дудь",
           "accept": [
-            "Гугл"
-          ]
+            "Юрий Дудь",
+            "Юра Дудь",
+            "Дудь",
+            "Юрій Дудь",
+            "Юрій",
+            "Yuri Dud",
+            "Yury Dud",
+            "Yuriy Dud",
+            "Yuri Dud'",
+            "Yury Dud'",
+            "Юрий Дуд",
+            "Юрій Дуд"
+          ],
+          "match": {
+            "fuzzy": true
+          }
         },
         {
-          "image": "round_6_7.jpg",
-          "answer": "Mercedes-Benz",
+          "image": "round_6_7.png",
+          "answer": "Макс Корж",
           "accept": [
-            "Mercedes",
-            "Мерседес"
-          ]
+            "Макс Корж",
+            "Макс",
+            "Корж",
+            "Max Korzh",
+            "Maks Korzh",
+            "Maksim Korzh",
+            "Maxim Korzh",
+            "Максим Корж",
+            "Максім Корж",
+            "Максим",
+            "Korzh"
+          ],
+          "match": {
+            "fuzzy": true
+          }
         },
         {
-          "image": "round_6_8.jpg",
-          "answer": "Coca-Cola",
+          "image": "round_6_8.png",
+          "answer": "Арнольд Шварценеггер",
           "accept": [
-            "Кока-кола",
-            "Coca Cola"
-          ]
+            "Arnold Schwarzenegger",
+            "Arnold",
+            "Schwarzenegger",
+            "Arnie",
+            "Арнольд Шварценеггер",
+            "Арнольд Шварценегер",
+            "Арнольд Шварцнеггер",
+            "Арнольд Шварцнегер",
+            "Арнольд Шварценэггер",
+            "Арнольд",
+            "Шварценеггер",
+            "Шварценегер",
+            "Шварцнеггер",
+            "Шварцнегер"
+          ],
+          "match": {
+            "fuzzy": true
+          }
         },
         {
-          "image": "round_6_9.jpg",
-          "answer": "Amazon",
+          "image": "round_6_9.png",
+          "answer": "Павел Дуров",
           "accept": [
-            "Амазон"
-          ]
+            "Павел Дуров",
+            "Pavel Durov",
+            "Pavel",
+            "Durov",
+            "Paul Durov",
+            "Павел",
+            "Дуров",
+            "Павел Дуров VK",
+            "Павел Дуров Telegram",
+            "Duroff",
+            "Duroff Pavel",
+            "Павел Дуров ВК",
+            "Павел Дуров Телеграм"
+          ],
+          "match": {
+            "fuzzy": true
+          }
         },
         {
-          "image": "round_6_10.jpg",
-          "answer": "Spotify",
+          "image": "round_6_10.png",
+          "answer": "Эд Ширан",
           "accept": [
-            "Спотифай"
-          ]
+            "Ed Sheeran",
+            "Ed Sheeren",
+            "Ed Sheran",
+            "Ed Shiran",
+            "Ed Sherran",
+            "Ed Sheeran music",
+            "Sheeran",
+            "Ed",
+            "Эд Ширан",
+            "Эд Шераn",
+            "Эд Шераан",
+            "Эд Шеран",
+            "Эд Широн",
+            "Эд Ширен",
+            "Ширан"
+          ],
+          "match": {
+            "fuzzy": true
+          }
         }
-      ]
+      ],
+      "questionPoints": 1
     },
     {
       "id": 7,
@@ -1184,7 +1330,10 @@
             "Італія"
           ]
         }
-      ]
+      ],
+      "cityPoints": 3,
+      "countryPoints": 1,
+      "scoring": "3 балла за город, 1 балл за страну."
     },
     {
       "id": 8,
@@ -1231,7 +1380,9 @@
           "text": "Сколько стран имеют монархию?",
           "answer": 43
         }
-      ]
+      ],
+      "closestPoints": 3,
+      "scoring": "3 балла тому, кто ответил ближе всех (при одинаковых ответах — всем по 3)."
     },
     {
       "id": 9,
@@ -1245,10 +1396,10 @@
             "round_9_1b.jpg"
           ],
           "options": [
-            "Золото (1 г)",
-            "Серебро (1 г)"
+            "Биг Мак",
+            "Билет в кино (средняя цена)"
           ],
-          "answer": "Золото (1 г)"
+          "answer": "Билет в кино (средняя цена)"
         },
         {
           "images": [
@@ -1256,10 +1407,10 @@
             "round_9_2b.jpg"
           ],
           "options": [
-            "iPhone 15 Pro",
-            "PlayStation 5"
+            "Starbucks кофе",
+            "Литр бензина"
           ],
-          "answer": "iPhone 15 Pro"
+          "answer": "Starbucks кофе"
         },
         {
           "images": [
@@ -1267,21 +1418,21 @@
             "round_9_3b.jpg"
           ],
           "options": [
-            "Rolex Submariner",
-            "Apple Watch Ultra"
+            "Instagram пост Ronaldo",
+            "Ferrari"
           ],
-          "answer": "Rolex Submariner"
+          "answer": "Instagram пост Ronaldo"
         },
         {
           "images": [
             "round_9_4a.jpg",
-            "round_9_4b.jpg"
+            "round_9_4b.png"
           ],
           "options": [
-            "Бензин АИ-95 (л)",
-            "Молоко (л)"
+            "Билет на финал ЛЧ",
+            "Год минимальной зарплаты в Украине"
           ],
-          "answer": "Бензин АИ-95 (л)"
+          "answer": "Год минимальной зарплаты в Украине"
         },
         {
           "images": [
@@ -1289,10 +1440,10 @@
             "round_9_5b.jpg"
           ],
           "options": [
-            "Картошка (кг)",
-            "Кофе (кг)"
+            "Bitcoin",
+            "реклама Super Bowl (1 слот)"
           ],
-          "answer": "Кофе (кг)"
+          "answer": "реклама Super Bowl (1 слот)"
         },
         {
           "images": [
@@ -1300,10 +1451,10 @@
             "round_9_6b.jpg"
           ],
           "options": [
-            "Tesla Model 3",
-            "Toyota Corolla"
+            "Tesla Model Y",
+            "1 кг золота"
           ],
-          "answer": "Tesla Model 3"
+          "answer": "Tesla Model Y"
         },
         {
           "images": [
@@ -1311,21 +1462,21 @@
             "round_9_7b.jpg"
           ],
           "options": [
-            "Книга (твёрдый переплёт)",
-            "Подписка Netflix (мес.)"
+            "такси в Лондоне за месяц",
+            "авиабилет Европа–Азия"
           ],
-          "answer": "Подписка Netflix (мес.)"
+          "answer": "авиабилет Европа–Азия"
         },
         {
           "images": [
             "round_9_8a.jpg",
-            "round_9_8b.jpg"
+            "round_9_8b.png"
           ],
           "options": [
-            "Шампанское Moët",
-            "Пиво крафт (0,5 л)"
+            "Uber в Дубае",
+            "AirPods Max"
           ],
-          "answer": "Шампанское Moët"
+          "answer": "AirPods Max"
         },
         {
           "images": [
@@ -1333,10 +1484,10 @@
             "round_9_9b.jpg"
           ],
           "options": [
-            "Lego набор коллекционный",
-            "Настольная игра"
+            "Netflix подписка на 100 лет",
+            "квартира в Киеве"
           ],
-          "answer": "Lego набор коллекционный"
+          "answer": "квартира в Киеве"
         },
         {
           "images": [
@@ -1344,234 +1495,141 @@
             "round_9_10b.jpg"
           ],
           "options": [
-            "Билет в кино",
-            "Билет на концерт"
+            "туалетная бумага (год поставок ресторана)",
+            "ужин в Michelin ресторане"
           ],
-          "answer": "Билет на концерт"
+          "answer": "ужин в Michelin ресторане"
         }
-      ]
+      ],
+      "questionPoints": 0.5,
+      "scoring": "0,5 балла за каждый правильный выбор."
     },
     {
       "id": 10,
       "title": "Очень плохие отзывы",
       "type": "reviewmatch",
       "imageFolder": "round10",
-      "matchPoints": 1,
+      "matchPoints": 0.5,
       "description": "10 скринов отзывов и 10 мест. Игроки по очереди сопоставляют отзыв с местом — каждое место можно выбрать только один раз.",
-      "scoring": "1 балл за каждое верное сопоставление.",
+      "scoring": "0,5 балла за каждое верное сопоставление.",
       "places": [
-        "1",
+        "Кафе 'Біля Каміну'",
         "Стадион 'Локомотив'",
-        "3",
-        "4",
+        "Шашлык Маркет",
+        "Заправка Okko",
         "Пузата Хата",
-        "13",
-        "23",
-        "123",
-        "32",
-        "3231"
+        "Пиво на разлив 'Напарники'",
+        "Водоканал",
+        "City Mall",
+        "ЗНТУ",
+        "Радуга"
       ],
       "questions": [
         {
-          "image": "round_10_1.jpg",
-          "answer": "Ресторан"
+          "image": "round_10_1.png",
+          "answer": "ЗНТУ"
         },
         {
-          "image": "round_10_2.jpg",
-          "answer": "Отель"
+          "image": "round_10_2.png",
+          "answer": "Радуга"
         },
         {
           "image": "round_10_3.png",
           "answer": "Пузата Хата"
         },
         {
-          "image": "round_10_4.jpg",
-          "answer": "Автомойка"
+          "image": "round_10_4.png",
+          "answer": "Водоканал"
         },
         {
-          "image": "round_10_5.jpg",
-          "answer": "Зоопарк"
+          "image": "round_10_5.png",
+          "answer": "Кафе 'Біля Каміну'"
         },
         {
-          "image": "round_10_6.jpg",
-          "answer": "Больница"
+          "image": "round_10_6.png",
+          "answer": "Пиво на разлив 'Напарники'"
         },
         {
           "image": "round_10_7.png",
           "answer": "Стадион 'Локомотив'"
         },
         {
-          "image": "round_10_8.jpg",
-          "answer": "Кинотеатр"
+          "image": "round_10_8.png",
+          "answer": "Шашлык Маркет"
         },
         {
-          "image": "round_10_9.jpg",
-          "answer": "Фитнес-клуб"
+          "image": "round_10_9.png",
+          "answer": "City Mall"
         },
         {
-          "image": "round_10_10.jpg",
-          "answer": "Аптека"
+          "image": "round_10_10.png",
+          "answer": "Заправка Okko"
         }
       ]
     }
   ],
-  "currentRoundIndex": 2,
+  "currentRoundIndex": 0,
   "currentQuestionIndex": 1,
   "reviewQuestionIndex": 0,
   "phase": "question",
   "started": true,
   "roundAnswers": {
-    "2-0": {
-      "type": "song",
-      "answerGroups": []
+    "0-0": {
+      "type": "choice",
+      "optionPlayers": [
+        {
+          "option": "Франция",
+          "isCorrect": false,
+          "players": []
+        },
+        {
+          "option": "Италия",
+          "isCorrect": false,
+          "players": []
+        },
+        {
+          "option": "США",
+          "isCorrect": true,
+          "players": [
+            {
+              "id": "659802f5-5db6-4d28-a124-5627c35b3357",
+              "name": "Гусь",
+              "avatar": null
+            }
+          ]
+        },
+        {
+          "option": "Швейцарий",
+          "isCorrect": false,
+          "players": []
+        }
+      ]
     }
   },
   "history": [
     {
       "type": "created",
-      "at": "2026-06-26T16:19:58.320Z"
+      "at": "2026-06-26T23:57:19.955Z"
     },
     {
       "type": "player_joined",
-      "playerId": "92897f22-c372-4075-ad18-fb51dd30894a",
-      "name": "Купитман",
-      "at": "2026-06-26T16:20:12.988Z"
-    },
-    {
-      "type": "player_joined",
-      "playerId": "6d65f64e-4301-4633-a49e-6314243ed988",
-      "name": "Жиган",
-      "at": "2026-06-26T16:20:17.494Z"
+      "playerId": "659802f5-5db6-4d28-a124-5627c35b3357",
+      "name": "Гусь",
+      "at": "2026-06-26T23:57:36.089Z"
     },
     {
       "type": "started",
-      "at": "2026-06-26T16:20:19.060Z"
+      "at": "2026-06-26T23:57:39.878Z"
     },
     {
       "type": "question",
       "round": 1,
       "questionNumber": 2,
-      "at": "2026-06-26T16:20:32.137Z"
-    },
-    {
-      "type": "question",
-      "round": 1,
-      "questionNumber": 3,
-      "at": "2026-06-26T16:20:35.549Z"
-    },
-    {
-      "type": "question",
-      "round": 1,
-      "questionNumber": 4,
-      "at": "2026-06-26T16:20:39.458Z"
-    },
-    {
-      "type": "question",
-      "round": 1,
-      "questionNumber": 5,
-      "at": "2026-06-26T16:20:42.454Z"
-    },
-    {
-      "type": "question",
-      "round": 1,
-      "questionNumber": 6,
-      "at": "2026-06-26T16:20:46.004Z"
-    },
-    {
-      "type": "question",
-      "round": 1,
-      "questionNumber": 7,
-      "at": "2026-06-26T16:20:49.091Z"
-    },
-    {
-      "type": "question",
-      "round": 1,
-      "questionNumber": 8,
-      "at": "2026-06-26T16:20:52.427Z"
-    },
-    {
-      "type": "question",
-      "round": 1,
-      "questionNumber": 9,
-      "at": "2026-06-26T16:20:55.801Z"
-    },
-    {
-      "type": "question",
-      "round": 1,
-      "questionNumber": 10,
-      "at": "2026-06-26T16:20:57.138Z"
-    },
-    {
-      "type": "round_complete",
-      "round": 1,
-      "roundTitle": "Вопросы с вариантами ответов",
-      "at": "2026-06-26T16:21:00.659Z"
-    },
-    {
-      "type": "question",
-      "round": 2,
-      "questionNumber": 2,
-      "at": "2026-06-26T16:21:39.184Z"
-    },
-    {
-      "type": "question",
-      "round": 2,
-      "questionNumber": 3,
-      "at": "2026-06-26T16:21:46.896Z"
-    },
-    {
-      "type": "question",
-      "round": 2,
-      "questionNumber": 4,
-      "at": "2026-06-26T16:21:55.283Z"
-    },
-    {
-      "type": "question",
-      "round": 2,
-      "questionNumber": 5,
-      "at": "2026-06-26T16:22:04.454Z"
-    },
-    {
-      "type": "question",
-      "round": 2,
-      "questionNumber": 6,
-      "at": "2026-06-26T16:22:10.689Z"
-    },
-    {
-      "type": "question",
-      "round": 2,
-      "questionNumber": 7,
-      "at": "2026-06-26T16:22:16.863Z"
-    },
-    {
-      "type": "question",
-      "round": 2,
-      "questionNumber": 8,
-      "at": "2026-06-26T16:22:24.138Z"
-    },
-    {
-      "type": "question",
-      "round": 2,
-      "questionNumber": 9,
-      "at": "2026-06-26T16:22:32.568Z"
-    },
-    {
-      "type": "question",
-      "round": 2,
-      "questionNumber": 10,
-      "at": "2026-06-26T16:22:39.311Z"
-    },
-    {
-      "type": "round_complete",
-      "round": 2,
-      "roundTitle": "Угадай фильм по кадру",
-      "at": "2026-06-26T16:22:45.679Z"
-    },
-    {
-      "type": "question",
-      "round": 3,
-      "questionNumber": 2,
-      "at": "2026-06-26T16:23:59.285Z"
+      "at": "2026-06-26T23:57:51.920Z"
     }
-  ]
+  ],
+  "audioClips": {},
+  "scoreAtRoundStart": {
+    "659802f5-5db6-4d28-a124-5627c35b3357": 0
+  }
 }

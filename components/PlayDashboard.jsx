@@ -177,7 +177,7 @@ export default function PlayDashboard({ gameId }) {
     const onDisconnect = () => setSocketReady(false);
     const onConnectError = () => {
       setSocketReady(false);
-      setJoinError("Нет связи с сервером. Запустите npm run dev.");
+      setJoinError("Нет связи с сервером. Проверьте, что игра запущена на сервере.");
       setJoinPending(false);
       setAuthState((prev) => (prev === "checking" ? "guest" : prev));
     };

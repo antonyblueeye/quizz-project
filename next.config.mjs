@@ -1,6 +1,13 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  /* config options here */
+  // Allow tunnel URLs in dev (localtunnel, ngrok, cloudflare)
+  allowedDevOrigins: [
+    "*.loca.lt",
+    "*.ngrok-free.app",
+    "*.ngrok.io",
+    "*.ngrok.app",
+    "*.trycloudflare.com",
+  ],
 };
 
 export default nextConfig;
