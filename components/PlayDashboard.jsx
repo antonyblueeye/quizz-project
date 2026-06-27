@@ -173,7 +173,14 @@ export default function PlayDashboard({ gameId }) {
   );
 
   useEffect(() => {
-    const onConnect = () => setSocketReady(true);
+    const onConnect = () => {
+      setSocketReady(true);
+      setJoinError("");
+      const savedPlayerId = localStorage.getItem(playerStorageKey(gameId));
+      if (savedPlayerId) {
+        emitWhenReady(socket, "rejoinGame", { gameId, playerId: savedPlayerId });
+      }
+    };
     const onDisconnect = () => setSocketReady(false);
     const onConnectError = () => {
       setSocketReady(false);

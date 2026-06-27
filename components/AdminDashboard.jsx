@@ -83,6 +83,8 @@ export default function AdminDashboard({ gameId, quizTemplateId }) {
   const [joinUrl, setJoinUrl] = useState("");
   const [adminError, setAdminError] = useState("");
   const [gameTitle, setGameTitle] = useState("");
+  const [nextPending, setNextPending] = useState(false);
+  const [socketConnected, setSocketConnected] = useState(false);
 
   useEffect(() => {
     fetch(`/api/games/${gameId}`)
@@ -117,11 +119,18 @@ export default function AdminDashboard({ gameId, quizTemplateId }) {
     setTimeLeft(0);
   }, []);
 
+  const initAdmin = useCallback(() => {
+    setAdminError("");
+    setSocketConnected(true);
+    socket.emit("adminInit", { gameId });
+  }, [socket, gameId]);
+
   useEffect(() => {
     const onRoundIntro = (intro) => {
       applyRoundIntro(intro);
     };
     const onQuestion = (q) => {
+      setNextPending(false);
       setRoundIntro(null);
       setRoundComplete(null);
       setReviewQuestion(null);
@@ -137,6 +146,7 @@ export default function AdminDashboard({ gameId, quizTemplateId }) {
       setRoundComplete(payload);
     };
     const onAnswerReview = (q) => {
+      setNextPending(false);
       setQuestion(null);
       setRoundComplete(null);
       setRoundLeaderboard(null);
@@ -168,22 +178,34 @@ export default function AdminDashboard({ gameId, quizTemplateId }) {
     const onAdminInitFailed = ({ message }) => {
       setAdminError(message);
     };
+    const onSocketError = ({ message }) => {
+      setAdminError(message || "Ошибка связи с сервером");
+      setNextPending(false);
+    };
+    const onConnect = () => initAdmin();
+    const onDisconnect = () => setSocketConnected(false);
 
+    socket.on("connect", onConnect);
+    socket.on("disconnect", onDisconnect);
     socket.on("playersUpdate", (list) => setPlayers(list));
     socket.on("sessionSync", onSessionSync);
     socket.on("adminInitFailed", onAdminInitFailed);
+    socket.on("error", onSocketError);
     socket.on("roundIntro", onRoundIntro);
     socket.on("question", onQuestion);
     socket.on("roundComplete", onRoundComplete);
     socket.on("answerReview", onAnswerReview);
     socket.on("roundLeaderboard", onRoundLeaderboard);
     socket.on("quizFinished", onQuizFinished);
-    socket.emit("adminInit", { gameId });
+    if (socket.connected) initAdmin();
 
     return () => {
+      socket.off("connect", onConnect);
+      socket.off("disconnect", onDisconnect);
       socket.off("playersUpdate");
       socket.off("sessionSync", onSessionSync);
       socket.off("adminInitFailed", onAdminInitFailed);
+      socket.off("error", onSocketError);
       socket.off("roundIntro", onRoundIntro);
       socket.off("question", onQuestion);
       socket.off("roundComplete", onRoundComplete);
@@ -191,7 +213,7 @@ export default function AdminDashboard({ gameId, quizTemplateId }) {
       socket.off("roundLeaderboard", onRoundLeaderboard);
       socket.off("quizFinished", onQuizFinished);
     };
-  }, [socket, gameId, applyRoundIntro]);
+  }, [socket, gameId, applyRoundIntro, initAdmin]);
 
   useEffect(() => {
     if (!started || !question || timeLeft <= 0) return;
@@ -214,9 +236,25 @@ export default function AdminDashboard({ gameId, quizTemplateId }) {
   }, [socket, gameId, applyRoundIntro]);
 
   const handleNext = useCallback(() => {
+    if (nextPending) return;
+    if (!socket.connected) {
+      setAdminError("Нет связи с сервером. Подождите переподключения или обновите страницу.");
+      return;
+    }
     if (question) setTimeLeft(60);
-    socket.emit("nextQuestion", { gameId });
-  }, [socket, gameId, question]);
+    setNextPending(true);
+    setAdminError("");
+    socket.emit("nextQuestion", { gameId }, (result) => {
+      setNextPending(false);
+      if (result?.error) {
+        setAdminError(
+          typeof result.error === "string"
+            ? result.error
+            : "Сервер не ответил. Обновите страницу."
+        );
+      }
+    });
+  }, [socket, gameId, question, nextPending]);
 
   const handleCopyLink = useCallback(async () => {
     if (!joinUrl) return;
@@ -226,7 +264,9 @@ export default function AdminDashboard({ gameId, quizTemplateId }) {
   const isFinished = gameStatus === "finished" || Boolean(finalLeaderboard);
   const answeredCount = players.filter((p) => p.answered).length;
 
-  const nextButtonLabel = roundIntro
+  const nextButtonLabel = nextPending
+    ? "Ждём…"
+    : roundIntro
     ? "Начать раунд"
     : roundLeaderboard
     ? roundLeaderboard.step === "round"
@@ -257,6 +297,9 @@ export default function AdminDashboard({ gameId, quizTemplateId }) {
 
       <div className="glass-card quiz-admin-card">
         {adminError && <p className="play-avatar-error">{adminError}</p>}
+        {!socketConnected && started && !isFinished && (
+          <p className="play-avatar-error">Связь с сервером потеряна, переподключаемся…</p>
+        )}
         <header className="quiz-admin-header">
           <div>
             <h1 className="quiz-admin-title">{gameTitle || "Загрузка…"}</h1>
@@ -358,7 +401,7 @@ export default function AdminDashboard({ gameId, quizTemplateId }) {
               </>
             )}
             {!isReviewMatchActive && (
-              <button type="button" className="button quiz-next-btn" onClick={handleNext}>
+              <button type="button" className="button quiz-next-btn" onClick={handleNext} disabled={nextPending}>
                 {nextButtonLabel}
               </button>
             )}
@@ -369,7 +412,7 @@ export default function AdminDashboard({ gameId, quizTemplateId }) {
           <section className="round-complete-panel">
             <h2 className="round-complete-title">Раунд {roundComplete.round} завершён</h2>
             <p className="round-complete-subtitle">{roundComplete.roundTitle}</p>
-            <button type="button" className="button quiz-next-btn" onClick={handleNext}>
+            <button type="button" className="button quiz-next-btn" onClick={handleNext} disabled={nextPending}>
               Перейти к ответам
             </button>
           </section>
@@ -383,7 +426,7 @@ export default function AdminDashboard({ gameId, quizTemplateId }) {
             ) : (
               <QuestionCard question={reviewQuestion} onSubmit={() => {}} disabled />
             )}
-            <button type="button" className="button quiz-next-btn" onClick={handleNext}>
+            <button type="button" className="button quiz-next-btn" onClick={handleNext} disabled={nextPending}>
               {nextButtonLabel}
             </button>
           </section>
@@ -399,7 +442,7 @@ export default function AdminDashboard({ gameId, quizTemplateId }) {
                   : `Общий рейтинг · после ${roundLeaderboard.round} раундов`
               }
             />
-            <button type="button" className="button quiz-next-btn" onClick={handleNext}>
+            <button type="button" className="button quiz-next-btn" onClick={handleNext} disabled={nextPending}>
               {nextButtonLabel}
             </button>
           </section>

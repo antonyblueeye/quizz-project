@@ -55,7 +55,8 @@ app.prepare().then(() => {
       let sess = store.ensureGame(gameId);
       if (!sess) {
         socket.emit("adminInitFailed", {
-          message: "Игра не найдена. Создайте новую игру в истории.",
+          message:
+            "Игра не найдена. Если сервер перезапускался (Render) — создайте новую игру. Не перезагружайте страницу во время квиза.",
         });
         return;
       }
@@ -145,9 +146,16 @@ app.prepare().then(() => {
     });
 
     socket.on("nextQuestion", ({ gameId }, cb) => {
-      const result = store.advanceQuestion(gameId);
+      try {
+        const result = store.advanceQuestion(gameId);
 
-      if (result.final) {
+        if (result?.error) {
+          socket.emit("error", { message: result.error });
+          if (typeof cb === "function") cb(result);
+          return;
+        }
+
+        if (result.final) {
         io.to(gameId).emit("playersUpdate", store.getPlayers(gameId));
         io.to(gameId).emit("quizFinished", {
           leaderboard: result.leaderboard,
@@ -199,6 +207,13 @@ app.prepare().then(() => {
       }
 
       if (typeof cb === "function") cb(result);
+      } catch (err) {
+        console.error("nextQuestion failed:", err);
+        socket.emit("error", {
+          message: "Не удалось перейти к следующему шагу. Обновите страницу.",
+        });
+        if (typeof cb === "function") cb({ error: true });
+      }
     });
 
     socket.on("disconnect", () => {

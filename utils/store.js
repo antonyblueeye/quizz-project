@@ -36,7 +36,12 @@ const sessions = {};
 
 function persist(gameId) {
   const sess = sessions[gameId];
-  if (sess) persistence.saveGame(sess);
+  if (!sess) return;
+  try {
+    persistence.saveGame(sess);
+  } catch (err) {
+    console.error(`persist failed for ${gameId}:`, err.message);
+  }
 }
 
 function loadGameIntoMemory(gameId) {
@@ -368,7 +373,11 @@ function advanceQuestion(gameId) {
     }
 
     persist(gameId);
-    return { reviewQuestion: getReviewQuestion(sess) };
+    const reviewQuestion = getReviewQuestion(sess);
+    if (!reviewQuestion) {
+      return { error: "Не удалось загрузить разбор ответа." };
+    }
+    return { reviewQuestion };
   }
 
   scoreCurrentQuestion(sess);

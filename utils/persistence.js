@@ -206,7 +206,21 @@ function saveGame(game) {
   ensureDir();
   game.updatedAt = new Date().toISOString();
   const payload = slimGameForDisk(game);
-  fs.writeFileSync(gameFilePath(game.gameId), JSON.stringify(payload, null, 2), "utf-8");
+  const filePath = gameFilePath(game.gameId);
+  const tmpPath = `${filePath}.tmp`;
+  const body = JSON.stringify(payload, null, 2);
+
+  try {
+    fs.writeFileSync(tmpPath, body, "utf-8");
+    fs.renameSync(tmpPath, filePath);
+  } catch (err) {
+    try {
+      if (fs.existsSync(tmpPath)) fs.unlinkSync(tmpPath);
+    } catch {
+      /* ignore cleanup errors */
+    }
+    throw err;
+  }
 
   const index = readIndex();
   const meta = buildMeta(game);

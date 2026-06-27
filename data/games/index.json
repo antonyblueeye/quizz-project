@@ -1,5 +1,20 @@
 [
   {
+    "gameId": "4794fbcb",
+    "quizTemplateId": "quiz1",
+    "title": "сб, 27 июня 2026 г. в 10:37",
+    "createdAt": "2026-06-27T07:37:52.343Z",
+    "updatedAt": "2026-06-27T07:37:52.385Z",
+    "status": "active",
+    "playerCount": 0,
+    "started": true,
+    "phase": "round_review",
+    "currentRound": 1,
+    "currentRoundTitle": "Вопросы с вариантами ответов",
+    "totalRounds": 10,
+    "progressLabel": "Раунд 1/10: Вопросы с вариантами ответов · разбор ответов"
+  },
+  {
     "gameId": "c50635fa",
     "quizTemplateId": "quiz1",
     "title": "сб, 27 июня 2026 г. в 02:57",
