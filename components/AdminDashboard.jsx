@@ -290,6 +290,8 @@ export default function AdminDashboard({ gameId, quizTemplateId }) {
 
   const isFinished = gameStatus === "finished" || Boolean(finalLeaderboard);
   const answeredCount = players.filter((p) => p.answered).length;
+  const isReviewMatchActive =
+    question?.type === "reviewmatch" && !matchReveal;
 
   const nextButtonLabel = nextPending
     ? "Ждём…"

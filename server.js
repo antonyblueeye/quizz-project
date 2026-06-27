@@ -28,9 +28,21 @@ try {
 
 const store = require("./utils/store");
 
+function withSocketError(socket, label, fn) {
+  try {
+    return fn();
+  } catch (err) {
+    console.error(`${label} failed:`, err);
+    socket.emit("error", {
+      message: "Внутренняя ошибка сервера. Обновите страницу.",
+    });
+    return null;
+  }
+}
+
 app.prepare().then(() => {
-  store.loadAllGamesIntoMemory();
-  console.log("✅ Restored active games from disk");
+  const preloaded = store.loadAllGamesIntoMemory();
+  console.log(`✅ Restored ${preloaded} recent game(s) from disk`);
 
   const server = createServer((req, res) => {
     handle(req, res);
@@ -52,47 +64,57 @@ app.prepare().then(() => {
     console.log("🔌 New socket connection", socket.id);
 
     socket.on("adminInit", ({ gameId }) => {
-      let sess = store.ensureGame(gameId);
-      if (!sess) {
-        socket.emit("adminInitFailed", {
-          message:
-            "Игра не найдена. Если сервер перезапускался (Render) — создайте новую игру. Не перезагружайте страницу во время квиза.",
-        });
-        return;
-      }
-      socket.join(gameId);
-      const snap = store.getSessionSnapshot(gameId);
-      socket.emit("playersUpdate", snap.players);
-      socket.emit("sessionSync", snap);
+      withSocketError(socket, "adminInit", () => {
+        const sess = store.ensureGame(gameId);
+        if (!sess) {
+          socket.emit("adminInitFailed", {
+            message:
+              "Игра не найдена. Если сервер перезапускался (Render) — создайте новую игру. Не перезагружайте страницу во время квиза.",
+          });
+          return;
+        }
+        socket.join(gameId);
+        const snap = store.getSessionSnapshot(gameId);
+        if (!snap) {
+          socket.emit("adminInitFailed", {
+            message: "Не удалось загрузить игру. Попробуйте создать новую.",
+          });
+          return;
+        }
+        socket.emit("playersUpdate", snap.players);
+        socket.emit("sessionSync", snap);
+      });
     });
 
     socket.on("joinQuiz", ({ gameId, playerName, avatar }) => {
-      if (!gameId) {
-        socket.emit("joinFailed", { message: "Неверная ссылка для входа." });
-        return;
-      }
+      withSocketError(socket, "joinQuiz", () => {
+        if (!gameId) {
+          socket.emit("joinFailed", { message: "Неверная ссылка для входа." });
+          return;
+        }
 
-      let sess = store.ensureGame(gameId);
-      if (!sess) {
-        socket.emit("joinFailed", {
-          message: "Игра не найдена. Откройте актуальную ссылку от ведущего.",
-        });
-        return;
-      }
-      if (sess.phase === "finished") {
-        socket.emit("joinFailed", { message: "Эта игра уже завершена." });
-        return;
-      }
+        const sess = store.ensureGame(gameId);
+        if (!sess) {
+          socket.emit("joinFailed", {
+            message: "Игра не найдена. Откройте актуальную ссылку от ведущего.",
+          });
+          return;
+        }
+        if (sess.phase === "finished") {
+          socket.emit("joinFailed", { message: "Эта игра уже завершена." });
+          return;
+        }
 
-      const playerId = store.addPlayer(gameId, playerName, socket.id, avatar);
-      if (!playerId) {
-        socket.emit("joinFailed", { message: "Не удалось войти в игру." });
-        return;
-      }
-      socket.join(gameId);
-      io.to(gameId).emit("playersUpdate", store.getPlayers(gameId));
-      socket.emit("joined", { playerId, gameId });
-      socket.emit("sessionSync", store.getPlayerSessionSnapshot(gameId, playerId));
+        const playerId = store.addPlayer(gameId, playerName, socket.id, avatar);
+        if (!playerId) {
+          socket.emit("joinFailed", { message: "Не удалось войти в игру." });
+          return;
+        }
+        socket.join(gameId);
+        io.to(gameId).emit("playersUpdate", store.getPlayers(gameId));
+        socket.emit("joined", { playerId, gameId });
+        socket.emit("sessionSync", store.getPlayerSessionSnapshot(gameId, playerId));
+      });
     });
 
     socket.on("rejoinGame", ({ gameId, playerId }) => {

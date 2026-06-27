@@ -256,8 +256,19 @@ function rebuildIndexFromDisk() {
   return index;
 }
 
-function listGames(quizTemplateId) {
-  let index = rebuildIndexFromDisk();
+function listGames(quizTemplateId, { rebuild = false } = {}) {
+  let index = rebuild ? rebuildIndexFromDisk() : readIndex();
+  if (!index.length) {
+    index = rebuildIndexFromDisk();
+  } else if (!rebuild) {
+    index = index.filter((entry) => {
+      if (!entry?.gameId) return false;
+      return fs.existsSync(gameFilePath(entry.gameId));
+    });
+    if (!index.length) {
+      index = rebuildIndexFromDisk();
+    }
+  }
   if (quizTemplateId) {
     index = index.filter((g) => g.quizTemplateId === quizTemplateId);
   }

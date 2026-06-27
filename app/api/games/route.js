@@ -54,9 +54,13 @@ export async function POST(request) {
     const quizData = loadQuizTemplate(quizTemplateId);
     const game = persistence.createGame(quizTemplateId, quizData);
     rememberCreate(quizTemplateId, clientToken, game.gameId);
-    store.registerGame(persistence.loadGame(game.gameId));
+    store.registerGame(game);
     return Response.json({ game: persistence.buildMeta(game) });
   } catch (e) {
-    return Response.json({ error: "Failed to create game" }, { status: 500 });
+    console.error("POST /api/games failed:", e);
+    return Response.json(
+      { error: "Failed to create game", detail: e.message },
+      { status: 500 }
+    );
   }
 }

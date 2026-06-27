@@ -609,13 +609,21 @@ function getPlayerSessionSnapshot(gameId, playerId) {
   return snap;
 }
 
+const PRELOAD_GAMES_MAX = 3;
+const PRELOAD_GAMES_MAX_AGE_MS = 6 * 60 * 60 * 1000;
+
 function loadAllGamesIntoMemory() {
-  const list = persistence.listGames();
+  const cutoff = Date.now() - PRELOAD_GAMES_MAX_AGE_MS;
+  const list = persistence
+    .listGames()
+    .filter((meta) => meta.status !== "finished")
+    .filter((meta) => new Date(meta.updatedAt).getTime() >= cutoff)
+    .slice(0, PRELOAD_GAMES_MAX);
+
   for (const meta of list) {
-    if (meta.status !== "finished") {
-      loadGameIntoMemory(meta.gameId);
-    }
+    loadGameIntoMemory(meta.gameId);
   }
+  return list.length;
 }
 
 function registerGame(game) {

@@ -1,19 +1,11 @@
 {
-  "gameId": "c50635fa",
+  "gameId": "9bb5ab9b",
   "quizTemplateId": "quiz1",
-  "title": "сб, 27 июня 2026 г. в 02:57",
-  "createdAt": "2026-06-26T23:57:19.955Z",
-  "updatedAt": "2026-06-27T14:38:50.438Z",
-  "status": "active",
-  "players": {
-    "659802f5-5db6-4d28-a124-5627c35b3357": {
-      "name": "Гусь",
-      "socketId": null,
-      "score": 0.5,
-      "answer": null,
-      "avatar": null
-    }
-  },
+  "title": "сб, 27 июня 2026 г. в 20:36",
+  "createdAt": "2026-06-27T17:36:56.236Z",
+  "updatedAt": "2026-06-27T17:36:56.236Z",
+  "status": "lobby",
+  "players": {},
   "rounds": [
     {
       "id": 1,
@@ -1510,7 +1502,7 @@
       "type": "reviewmatch",
       "imageFolder": "round10",
       "matchPoints": 0.5,
-      "description": "10 скринов отзывов и 10 мест. Игроки по очереди сопоставляют отзыв с местом — каждое место можно выбрать только один раз.",
+      "description": "10 скринов отзывов. Все игроки одновременно выбирают место из списка — после каждого отзыва видно, кто угадал.",
       "scoring": "0,5 балла за каждое верное сопоставление.",
       "places": [
         "Кафе 'Біля Каміну'",
@@ -1569,67 +1561,15 @@
     }
   ],
   "currentRoundIndex": 0,
-  "currentQuestionIndex": 1,
+  "currentQuestionIndex": 0,
   "reviewQuestionIndex": 0,
-  "phase": "question",
-  "started": true,
-  "roundAnswers": {
-    "0-0": {
-      "type": "choice",
-      "optionPlayers": [
-        {
-          "option": "Франция",
-          "isCorrect": false,
-          "players": []
-        },
-        {
-          "option": "Италия",
-          "isCorrect": false,
-          "players": []
-        },
-        {
-          "option": "США",
-          "isCorrect": true,
-          "players": [
-            {
-              "id": "659802f5-5db6-4d28-a124-5627c35b3357",
-              "name": "Гусь",
-              "avatar": null
-            }
-          ]
-        },
-        {
-          "option": "Швейцарий",
-          "isCorrect": false,
-          "players": []
-        }
-      ]
-    }
-  },
+  "phase": "idle",
+  "started": false,
+  "roundAnswers": {},
   "history": [
     {
       "type": "created",
-      "at": "2026-06-26T23:57:19.955Z"
-    },
-    {
-      "type": "player_joined",
-      "playerId": "659802f5-5db6-4d28-a124-5627c35b3357",
-      "name": "Гусь",
-      "at": "2026-06-26T23:57:36.089Z"
-    },
-    {
-      "type": "started",
-      "at": "2026-06-26T23:57:39.878Z"
-    },
-    {
-      "type": "question",
-      "round": 1,
-      "questionNumber": 2,
-      "at": "2026-06-26T23:57:51.920Z"
+      "at": "2026-06-27T17:36:56.236Z"
     }
-  ],
-  "audioClips": {},
-  "scoreAtRoundStart": {
-    "659802f5-5db6-4d28-a124-5627c35b3357": 0
-  }
+  ]
 }
