@@ -1636,6 +1636,21 @@ a:hover {
   background: rgba(255, 120, 120, 0.06);
 }
 
+.review-match-place--static {
+  cursor: default;
+}
+
+.review-match-places--reveal .review-match-place {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.review-match-reveal-answer {
+  margin: 1rem 0 1.25rem;
+}
+
 .review-match-place-icon {
   font-size: 1.25rem;
 }

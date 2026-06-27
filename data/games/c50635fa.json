@@ -3,12 +3,12 @@
   "quizTemplateId": "quiz1",
   "title": "сб, 27 июня 2026 г. в 02:57",
   "createdAt": "2026-06-26T23:57:19.955Z",
-  "updatedAt": "2026-06-27T07:29:13.454Z",
+  "updatedAt": "2026-06-27T13:43:36.736Z",
   "status": "active",
   "players": {
     "659802f5-5db6-4d28-a124-5627c35b3357": {
       "name": "Гусь",
-      "socketId": "m3aMzOXCyMekLdP0AAAa",
+      "socketId": "MNHSVGn7iJXfConmAAAe",
       "score": 0.5,
       "answer": null,
       "avatar": null

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 const PLACE_ICONS = {
   ресторан: "🍽️",
@@ -41,51 +41,22 @@ function ReviewImage({ src, alt }) {
   );
 }
 
-function PlayerTurnBadge({ player }) {
-  if (!player) {
-    return <p className="review-match-no-player">Добавьте игроков, чтобы начать раунд</p>;
-  }
-
+function PlayerAvatars({ players }) {
+  if (!players?.length) return null;
   return (
-    <div className="review-match-turn">
-      {player.avatar ? (
-        <img src={player.avatar} alt="" className="review-match-turn-avatar" />
-      ) : (
-        <span className="review-match-turn-avatar review-match-turn-avatar-fallback">
-          {player.name.charAt(0).toUpperCase()}
-        </span>
-      )}
-      <div>
-        <span className="review-match-turn-label">Сейчас ход</span>
-        <strong className="review-match-turn-name">{player.name}</strong>
-      </div>
-    </div>
-  );
-}
-
-function FeedbackToast({ feedback, onDone }) {
-  useEffect(() => {
-    if (!feedback) return undefined;
-    const timer = setTimeout(onDone, 2200);
-    return () => clearTimeout(timer);
-  }, [feedback, onDone]);
-
-  if (!feedback) return null;
-
-  return (
-    <div
-      className={`review-match-feedback${feedback.correct ? " review-match-feedback--ok" : " review-match-feedback--bad"}`}
-    >
-      <span className="review-match-feedback-title">
-        {feedback.correct ? "Верно!" : "Мимо"}
-      </span>
-      <p>
-        {feedback.playerName} → <strong>{feedback.pickedPlace}</strong>
-      </p>
-      {!feedback.correct && (
-        <p className="review-match-feedback-answer">
-          Правильно: {feedback.correctAnswer}
-        </p>
+    <div className="review-answer-avatars">
+      {players.map((p) =>
+        p.avatar ? (
+          <img key={p.id} src={p.avatar} alt="" className="player-avatar review-player-avatar" />
+        ) : (
+          <span
+            key={p.id}
+            className="player-avatar player-avatar-fallback review-player-avatar"
+            title={p.name}
+          >
+            {p.name.charAt(0).toUpperCase()}
+          </span>
+        )
       )}
     </div>
   );
@@ -97,130 +68,80 @@ export default function ReviewMatchPanel({
   disabled = false,
   showMeta = true,
 }) {
-  const [feedbackVisible, setFeedbackVisible] = useState(null);
-
-  useEffect(() => {
-    if (data?.lastFeedback) {
-      setFeedbackVisible(data.lastFeedback);
-    }
-  }, [data?.lastFeedback, data?.reviewNumber]);
-
   if (!data) return null;
 
-  if (data.reviewMode && data.summaryItems) {
+  if (data.revealMode) {
+    const breakdown = data.answerBreakdown;
     return (
-      <section className="review-match-panel review-match-panel--summary">
+      <section className="review-match-panel review-match-panel--reveal">
         {showMeta && (
           <p className="question-meta">
-            Разбор · Раунд {data.round} · {data.roundTitle}
+            Результаты · Раунд {data.round} · Отзыв {data.questionNumber} из {data.totalInRound}
           </p>
         )}
-        <h2 className="review-match-title">{data.text}</h2>
-        <ul className="review-match-summary-grid">
-          {data.summaryItems.map((item) => (
-            <li
-              key={item.reviewNumber}
-              className={`review-match-summary-card${item.correct ? " review-match-summary-card--ok" : " review-match-summary-card--bad"}`}
-            >
-              <ReviewImage src={item.image} alt={`Отзыв ${item.reviewNumber}`} />
-              <div className="review-match-summary-body">
-                <span className="review-match-review-num">#{item.reviewNumber}</span>
-                <p className="review-match-summary-place">
-                  {placeIcon(item.correctAnswer)} {item.correctAnswer}
-                </p>
-                {item.playerName ? (
-                  <p className="review-match-summary-pick">
-                    {item.playerName}: «{item.pickedPlace}»
-                    {item.correct ? " ✓" : " ✗"}
-                  </p>
-                ) : (
-                  <p className="review-match-summary-pick">Без ответа</p>
-                )}
+
+        <div className="review-match-review-card">
+          <ReviewImage src={data.image} alt={`Отзыв ${data.questionNumber}`} />
+        </div>
+
+        <div className="review-match-reveal-answer">
+          <span className="question-review-label">Правильный ответ</span>
+          <p className="question-review-value">
+            {placeIcon(data.correctAnswer)} {data.correctAnswer}
+          </p>
+        </div>
+
+        {breakdown?.optionPlayers ? (
+          <div className="review-match-places review-match-places--reveal">
+            {breakdown.optionPlayers.map((group) => (
+              <div
+                key={group.option}
+                className={`review-match-place review-match-place--static${group.isCorrect ? " review-match-place--correct" : group.players.length ? " review-match-place--wrong" : ""}`}
+              >
+                <span className="review-match-place-icon">{placeIcon(group.option)}</span>
+                <span className="review-match-place-name">{group.option}</span>
+                <PlayerAvatars players={group.players} />
               </div>
-            </li>
-          ))}
-        </ul>
+            ))}
+          </div>
+        ) : (
+          <p className="question-review-alts">Никто не ответил</p>
+        )}
       </section>
     );
   }
 
-  const canPick = !disabled && data.isYourTurn;
+  const canPick = !disabled;
 
   return (
     <section className="review-match-panel">
       {showMeta && (
         <p className="question-meta">
-          Раунд {data.round} · Отзыв {data.reviewNumber} из {data.totalReviews}
+          Раунд {data.round} · Отзыв {data.questionNumber} из {data.totalInRound}
+          {data.scoringHint ? ` · ${data.scoringHint}` : ""}
         </p>
       )}
 
-      <div className="review-match-layout">
-        <div className="review-match-main">
-          <PlayerTurnBadge player={data.activePlayer} />
+      <p className="review-match-hint">{data.text || "Выберите место для этого отзыва"}</p>
 
-          <div className="review-match-review-card">
-            <span className="review-match-review-badge">Отзыв {data.reviewNumber}</span>
-            <ReviewImage src={data.image} alt={`Отзыв ${data.reviewNumber}`} />
-          </div>
-
-          <p className="review-match-hint">
-            {canPick
-              ? "Выберите место, которому соответствует этот отзыв"
-              : data.isYourTurn
-                ? "Вы уже ответили — ждите следующий отзыв"
-                : `Ждём ответ от ${data.activePlayer?.name || "игрока"}…`}
-          </p>
-
-          <div className="review-match-places">
-            {data.places.map((place) => {
-              const isAvailable = !place.used && canPick;
-              return (
-                <button
-                  key={place.name}
-                  type="button"
-                  className={`review-match-place${place.used ? " review-match-place--used" : ""}${place.used && place.correct ? " review-match-place--correct" : ""}${place.used && place.correct === false ? " review-match-place--wrong" : ""}${isAvailable ? " review-match-place--active" : ""}`}
-                  disabled={!isAvailable}
-                  onClick={() => onPick?.(place.name)}
-                >
-                  <span className="review-match-place-icon">{placeIcon(place.name)}</span>
-                  <span className="review-match-place-name">{place.name}</span>
-                  {place.used && (
-                    <span className="review-match-place-meta">
-                      {place.pickedBy}
-                      {place.correct ? " ✓" : " ✗"}
-                    </span>
-                  )}
-                </button>
-              );
-            })}
-          </div>
-        </div>
-
-        {data.matchHistory?.length > 0 && (
-          <aside className="review-match-history">
-            <h3 className="review-match-history-title">Уже сопоставлено</h3>
-            <ul className="review-match-history-list">
-              {[...data.matchHistory].reverse().map((item) => (
-                <li
-                  key={`${item.reviewNumber}-${item.pickedPlace}`}
-                  className={`review-match-history-item${item.correct ? " review-match-history-item--ok" : " review-match-history-item--bad"}`}
-                >
-                  <span className="review-match-history-num">#{item.reviewNumber}</span>
-                  <div>
-                    <strong>{item.playerName}</strong>
-                    <span> → {item.pickedPlace}</span>
-                  </div>
-                </li>
-              ))}
-            </ul>
-          </aside>
-        )}
+      <div className="review-match-review-card">
+        <ReviewImage src={data.image} alt={`Отзыв ${data.questionNumber}`} />
       </div>
 
-      <FeedbackToast
-        feedback={feedbackVisible}
-        onDone={() => setFeedbackVisible(null)}
-      />
+      <div className="review-match-places">
+        {(data.places || []).map((place) => (
+          <button
+            key={place.name}
+            type="button"
+            className={`review-match-place${canPick ? " review-match-place--active" : ""}`}
+            disabled={!canPick}
+            onClick={() => onPick?.(place.name)}
+          >
+            <span className="review-match-place-icon">{placeIcon(place.name)}</span>
+            <span className="review-match-place-name">{place.name}</span>
+          </button>
+        ))}
+      </div>
     </section>
   );
 }

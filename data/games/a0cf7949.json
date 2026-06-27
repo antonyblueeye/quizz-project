@@ -1,4 +1,19 @@
 {
+  "gameId": "a0cf7949",
+  "quizTemplateId": "quiz1",
+  "title": "сб, 27 июня 2026 г. в 16:44",
+  "createdAt": "2026-06-27T13:44:38.422Z",
+  "updatedAt": "2026-06-27T13:44:38.462Z",
+  "status": "active",
+  "players": {
+    "38f733fa-fa80-412c-bcde-d1159dee8485": {
+      "name": "A",
+      "socketId": "s1",
+      "score": 0.5,
+      "answer": null,
+      "avatar": null
+    }
+  },
   "rounds": [
     {
       "id": 1,
@@ -1552,5 +1567,94 @@
         }
       ]
     }
-  ]
+  ],
+  "currentRoundIndex": 9,
+  "currentQuestionIndex": 0,
+  "reviewQuestionIndex": 0,
+  "phase": "match_reveal",
+  "started": true,
+  "roundAnswers": {
+    "9-0": {
+      "type": "reviewmatch",
+      "correctAnswer": "ЗНТУ",
+      "optionPlayers": [
+        {
+          "option": "Кафе 'Біля Каміну'",
+          "isCorrect": false,
+          "players": []
+        },
+        {
+          "option": "Стадион 'Локомотив'",
+          "isCorrect": false,
+          "players": []
+        },
+        {
+          "option": "Шашлык Маркет",
+          "isCorrect": false,
+          "players": []
+        },
+        {
+          "option": "Заправка Okko",
+          "isCorrect": false,
+          "players": []
+        },
+        {
+          "option": "Пузата Хата",
+          "isCorrect": false,
+          "players": []
+        },
+        {
+          "option": "Пиво на разлив 'Напарники'",
+          "isCorrect": false,
+          "players": []
+        },
+        {
+          "option": "Водоканал",
+          "isCorrect": false,
+          "players": []
+        },
+        {
+          "option": "City Mall",
+          "isCorrect": false,
+          "players": []
+        },
+        {
+          "option": "ЗНТУ",
+          "isCorrect": true,
+          "players": [
+            {
+              "id": "38f733fa-fa80-412c-bcde-d1159dee8485",
+              "name": "A",
+              "avatar": null
+            }
+          ]
+        },
+        {
+          "option": "Радуга",
+          "isCorrect": false,
+          "players": []
+        }
+      ]
+    }
+  },
+  "history": [
+    {
+      "type": "created",
+      "at": "2026-06-27T13:44:38.422Z"
+    },
+    {
+      "type": "player_joined",
+      "playerId": "38f733fa-fa80-412c-bcde-d1159dee8485",
+      "name": "A",
+      "at": "2026-06-27T13:44:38.446Z"
+    },
+    {
+      "type": "started",
+      "at": "2026-06-27T13:44:38.448Z"
+    }
+  ],
+  "audioClips": {},
+  "scoreAtRoundStart": {
+    "38f733fa-fa80-412c-bcde-d1159dee8485": 0
+  }
 }

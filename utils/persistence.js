@@ -69,6 +69,8 @@ function getProgressLabel(game) {
       return `Раунд ${roundNum}/${totalRounds}: ${roundTitle} · раунд завершён`;
     case "round_review":
       return `Раунд ${roundNum}/${totalRounds}: ${roundTitle} · разбор ответов`;
+    case "match_reveal":
+      return `Раунд ${roundNum}/${totalRounds}: ${roundTitle} · результаты ответа`;
     case "round_leaderboard":
       return `Раунд ${roundNum}/${totalRounds}: ${roundTitle} · рейтинг`;
     case "round_intro":

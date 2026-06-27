@@ -1,4 +1,26 @@
 {
+  "gameId": "ac6b07d5",
+  "quizTemplateId": "quiz1",
+  "title": "сб, 27 июня 2026 г. в 16:43",
+  "createdAt": "2026-06-27T13:43:58.435Z",
+  "updatedAt": "2026-06-27T13:43:58.999Z",
+  "status": "active",
+  "players": {
+    "41a209ee-39cc-482d-ade9-faee6940f829": {
+      "name": "A",
+      "socketId": "s1",
+      "score": 0,
+      "answer": null,
+      "avatar": null
+    },
+    "cc86c974-66bd-48d6-b00c-c4e6e40c3dc6": {
+      "name": "B",
+      "socketId": "s2",
+      "score": 0,
+      "answer": null,
+      "avatar": null
+    }
+  },
   "rounds": [
     {
       "id": 1,
@@ -1552,5 +1574,692 @@
         }
       ]
     }
-  ]
+  ],
+  "currentRoundIndex": 9,
+  "currentQuestionIndex": 1,
+  "reviewQuestionIndex": 0,
+  "phase": "match_reveal",
+  "started": true,
+  "roundAnswers": {
+    "9-0": {
+      "type": "reviewmatch",
+      "correctAnswer": "ЗНТУ",
+      "optionPlayers": [
+        {
+          "option": "Кафе 'Біля Каміну'",
+          "isCorrect": false,
+          "players": []
+        },
+        {
+          "option": "Стадион 'Локомотив'",
+          "isCorrect": false,
+          "players": []
+        },
+        {
+          "option": "Шашлык Маркет",
+          "isCorrect": false,
+          "players": []
+        },
+        {
+          "option": "Заправка Okko",
+          "isCorrect": false,
+          "players": []
+        },
+        {
+          "option": "Пузата Хата",
+          "isCorrect": false,
+          "players": []
+        },
+        {
+          "option": "Пиво на разлив 'Напарники'",
+          "isCorrect": false,
+          "players": []
+        },
+        {
+          "option": "Водоканал",
+          "isCorrect": false,
+          "players": []
+        },
+        {
+          "option": "City Mall",
+          "isCorrect": false,
+          "players": []
+        },
+        {
+          "option": "ЗНТУ",
+          "isCorrect": true,
+          "players": []
+        },
+        {
+          "option": "Радуга",
+          "isCorrect": false,
+          "players": []
+        }
+      ]
+    },
+    "9-1": {
+      "type": "reviewmatch",
+      "correctAnswer": "Радуга",
+      "optionPlayers": [
+        {
+          "option": "Кафе 'Біля Каміну'",
+          "isCorrect": false,
+          "players": []
+        },
+        {
+          "option": "Стадион 'Локомотив'",
+          "isCorrect": false,
+          "players": []
+        },
+        {
+          "option": "Шашлык Маркет",
+          "isCorrect": false,
+          "players": []
+        },
+        {
+          "option": "Заправка Okko",
+          "isCorrect": false,
+          "players": []
+        },
+        {
+          "option": "Пузата Хата",
+          "isCorrect": false,
+          "players": []
+        },
+        {
+          "option": "Пиво на разлив 'Напарники'",
+          "isCorrect": false,
+          "players": []
+        },
+        {
+          "option": "Водоканал",
+          "isCorrect": false,
+          "players": []
+        },
+        {
+          "option": "City Mall",
+          "isCorrect": false,
+          "players": []
+        },
+        {
+          "option": "ЗНТУ",
+          "isCorrect": false,
+          "players": []
+        },
+        {
+          "option": "Радуга",
+          "isCorrect": true,
+          "players": []
+        }
+      ]
+    }
+  },
+  "history": [
+    {
+      "type": "created",
+      "at": "2026-06-27T13:43:58.435Z"
+    },
+    {
+      "type": "player_joined",
+      "playerId": "41a209ee-39cc-482d-ade9-faee6940f829",
+      "name": "A",
+      "at": "2026-06-27T13:43:58.453Z"
+    },
+    {
+      "type": "player_joined",
+      "playerId": "cc86c974-66bd-48d6-b00c-c4e6e40c3dc6",
+      "name": "B",
+      "at": "2026-06-27T13:43:58.455Z"
+    },
+    {
+      "type": "started",
+      "at": "2026-06-27T13:43:58.457Z"
+    },
+    {
+      "type": "question",
+      "round": 1,
+      "questionNumber": 2,
+      "at": "2026-06-27T13:43:58.463Z"
+    },
+    {
+      "type": "question",
+      "round": 1,
+      "questionNumber": 3,
+      "at": "2026-06-27T13:43:58.465Z"
+    },
+    {
+      "type": "question",
+      "round": 1,
+      "questionNumber": 4,
+      "at": "2026-06-27T13:43:58.467Z"
+    },
+    {
+      "type": "question",
+      "round": 1,
+      "questionNumber": 5,
+      "at": "2026-06-27T13:43:58.469Z"
+    },
+    {
+      "type": "question",
+      "round": 1,
+      "questionNumber": 6,
+      "at": "2026-06-27T13:43:58.471Z"
+    },
+    {
+      "type": "question",
+      "round": 1,
+      "questionNumber": 7,
+      "at": "2026-06-27T13:43:58.473Z"
+    },
+    {
+      "type": "question",
+      "round": 1,
+      "questionNumber": 8,
+      "at": "2026-06-27T13:43:58.475Z"
+    },
+    {
+      "type": "question",
+      "round": 1,
+      "questionNumber": 9,
+      "at": "2026-06-27T13:43:58.477Z"
+    },
+    {
+      "type": "question",
+      "round": 1,
+      "questionNumber": 10,
+      "at": "2026-06-27T13:43:58.479Z"
+    },
+    {
+      "type": "round_complete",
+      "round": 1,
+      "roundTitle": "Вопросы с вариантами ответов",
+      "at": "2026-06-27T13:43:58.481Z"
+    },
+    {
+      "type": "question",
+      "round": 2,
+      "questionNumber": 2,
+      "at": "2026-06-27T13:43:58.516Z"
+    },
+    {
+      "type": "question",
+      "round": 2,
+      "questionNumber": 3,
+      "at": "2026-06-27T13:43:58.518Z"
+    },
+    {
+      "type": "question",
+      "round": 2,
+      "questionNumber": 4,
+      "at": "2026-06-27T13:43:58.523Z"
+    },
+    {
+      "type": "question",
+      "round": 2,
+      "questionNumber": 5,
+      "at": "2026-06-27T13:43:58.526Z"
+    },
+    {
+      "type": "question",
+      "round": 2,
+      "questionNumber": 6,
+      "at": "2026-06-27T13:43:58.528Z"
+    },
+    {
+      "type": "question",
+      "round": 2,
+      "questionNumber": 7,
+      "at": "2026-06-27T13:43:58.530Z"
+    },
+    {
+      "type": "question",
+      "round": 2,
+      "questionNumber": 8,
+      "at": "2026-06-27T13:43:58.532Z"
+    },
+    {
+      "type": "question",
+      "round": 2,
+      "questionNumber": 9,
+      "at": "2026-06-27T13:43:58.534Z"
+    },
+    {
+      "type": "question",
+      "round": 2,
+      "questionNumber": 10,
+      "at": "2026-06-27T13:43:58.537Z"
+    },
+    {
+      "type": "round_complete",
+      "round": 2,
+      "roundTitle": "Угадай фильм по кадру",
+      "at": "2026-06-27T13:43:58.540Z"
+    },
+    {
+      "type": "question",
+      "round": 3,
+      "questionNumber": 2,
+      "at": "2026-06-27T13:43:58.575Z"
+    },
+    {
+      "type": "question",
+      "round": 3,
+      "questionNumber": 3,
+      "at": "2026-06-27T13:43:58.577Z"
+    },
+    {
+      "type": "question",
+      "round": 3,
+      "questionNumber": 4,
+      "at": "2026-06-27T13:43:58.580Z"
+    },
+    {
+      "type": "question",
+      "round": 3,
+      "questionNumber": 5,
+      "at": "2026-06-27T13:43:58.582Z"
+    },
+    {
+      "type": "question",
+      "round": 3,
+      "questionNumber": 6,
+      "at": "2026-06-27T13:43:58.584Z"
+    },
+    {
+      "type": "question",
+      "round": 3,
+      "questionNumber": 7,
+      "at": "2026-06-27T13:43:58.586Z"
+    },
+    {
+      "type": "question",
+      "round": 3,
+      "questionNumber": 8,
+      "at": "2026-06-27T13:43:58.588Z"
+    },
+    {
+      "type": "question",
+      "round": 3,
+      "questionNumber": 9,
+      "at": "2026-06-27T13:43:58.590Z"
+    },
+    {
+      "type": "question",
+      "round": 3,
+      "questionNumber": 10,
+      "at": "2026-06-27T13:43:58.593Z"
+    },
+    {
+      "type": "round_complete",
+      "round": 3,
+      "roundTitle": "Угадай песню",
+      "at": "2026-06-27T13:43:58.595Z"
+    },
+    {
+      "type": "question",
+      "round": 4,
+      "questionNumber": 2,
+      "at": "2026-06-27T13:43:58.630Z"
+    },
+    {
+      "type": "question",
+      "round": 4,
+      "questionNumber": 3,
+      "at": "2026-06-27T13:43:58.632Z"
+    },
+    {
+      "type": "question",
+      "round": 4,
+      "questionNumber": 4,
+      "at": "2026-06-27T13:43:58.634Z"
+    },
+    {
+      "type": "question",
+      "round": 4,
+      "questionNumber": 5,
+      "at": "2026-06-27T13:43:58.637Z"
+    },
+    {
+      "type": "question",
+      "round": 4,
+      "questionNumber": 6,
+      "at": "2026-06-27T13:43:58.639Z"
+    },
+    {
+      "type": "question",
+      "round": 4,
+      "questionNumber": 7,
+      "at": "2026-06-27T13:43:58.642Z"
+    },
+    {
+      "type": "question",
+      "round": 4,
+      "questionNumber": 8,
+      "at": "2026-06-27T13:43:58.644Z"
+    },
+    {
+      "type": "question",
+      "round": 4,
+      "questionNumber": 9,
+      "at": "2026-06-27T13:43:58.646Z"
+    },
+    {
+      "type": "question",
+      "round": 4,
+      "questionNumber": 10,
+      "at": "2026-06-27T13:43:58.648Z"
+    },
+    {
+      "type": "round_complete",
+      "round": 4,
+      "roundTitle": "Правда или ложь",
+      "at": "2026-06-27T13:43:58.650Z"
+    },
+    {
+      "type": "question",
+      "round": 5,
+      "questionNumber": 2,
+      "at": "2026-06-27T13:43:58.687Z"
+    },
+    {
+      "type": "question",
+      "round": 5,
+      "questionNumber": 3,
+      "at": "2026-06-27T13:43:58.690Z"
+    },
+    {
+      "type": "question",
+      "round": 5,
+      "questionNumber": 4,
+      "at": "2026-06-27T13:43:58.692Z"
+    },
+    {
+      "type": "question",
+      "round": 5,
+      "questionNumber": 5,
+      "at": "2026-06-27T13:43:58.695Z"
+    },
+    {
+      "type": "question",
+      "round": 5,
+      "questionNumber": 6,
+      "at": "2026-06-27T13:43:58.697Z"
+    },
+    {
+      "type": "question",
+      "round": 5,
+      "questionNumber": 7,
+      "at": "2026-06-27T13:43:58.699Z"
+    },
+    {
+      "type": "question",
+      "round": 5,
+      "questionNumber": 8,
+      "at": "2026-06-27T13:43:58.701Z"
+    },
+    {
+      "type": "question",
+      "round": 5,
+      "questionNumber": 9,
+      "at": "2026-06-27T13:43:58.703Z"
+    },
+    {
+      "type": "question",
+      "round": 5,
+      "questionNumber": 10,
+      "at": "2026-06-27T13:43:58.706Z"
+    },
+    {
+      "type": "round_complete",
+      "round": 5,
+      "roundTitle": "Угадай язык",
+      "at": "2026-06-27T13:43:58.708Z"
+    },
+    {
+      "type": "question",
+      "round": 6,
+      "questionNumber": 2,
+      "at": "2026-06-27T13:43:58.743Z"
+    },
+    {
+      "type": "question",
+      "round": 6,
+      "questionNumber": 3,
+      "at": "2026-06-27T13:43:58.745Z"
+    },
+    {
+      "type": "question",
+      "round": 6,
+      "questionNumber": 4,
+      "at": "2026-06-27T13:43:58.747Z"
+    },
+    {
+      "type": "question",
+      "round": 6,
+      "questionNumber": 5,
+      "at": "2026-06-27T13:43:58.750Z"
+    },
+    {
+      "type": "question",
+      "round": 6,
+      "questionNumber": 6,
+      "at": "2026-06-27T13:43:58.752Z"
+    },
+    {
+      "type": "question",
+      "round": 6,
+      "questionNumber": 7,
+      "at": "2026-06-27T13:43:58.754Z"
+    },
+    {
+      "type": "question",
+      "round": 6,
+      "questionNumber": 8,
+      "at": "2026-06-27T13:43:58.756Z"
+    },
+    {
+      "type": "question",
+      "round": 6,
+      "questionNumber": 9,
+      "at": "2026-06-27T13:43:58.758Z"
+    },
+    {
+      "type": "question",
+      "round": 6,
+      "questionNumber": 10,
+      "at": "2026-06-27T13:43:58.761Z"
+    },
+    {
+      "type": "round_complete",
+      "round": 6,
+      "roundTitle": "Угадай знаменитость",
+      "at": "2026-06-27T13:43:58.763Z"
+    },
+    {
+      "type": "question",
+      "round": 7,
+      "questionNumber": 2,
+      "at": "2026-06-27T13:43:58.798Z"
+    },
+    {
+      "type": "question",
+      "round": 7,
+      "questionNumber": 3,
+      "at": "2026-06-27T13:43:58.801Z"
+    },
+    {
+      "type": "question",
+      "round": 7,
+      "questionNumber": 4,
+      "at": "2026-06-27T13:43:58.803Z"
+    },
+    {
+      "type": "question",
+      "round": 7,
+      "questionNumber": 5,
+      "at": "2026-06-27T13:43:58.805Z"
+    },
+    {
+      "type": "question",
+      "round": 7,
+      "questionNumber": 6,
+      "at": "2026-06-27T13:43:58.808Z"
+    },
+    {
+      "type": "question",
+      "round": 7,
+      "questionNumber": 7,
+      "at": "2026-06-27T13:43:58.810Z"
+    },
+    {
+      "type": "question",
+      "round": 7,
+      "questionNumber": 8,
+      "at": "2026-06-27T13:43:58.813Z"
+    },
+    {
+      "type": "question",
+      "round": 7,
+      "questionNumber": 9,
+      "at": "2026-06-27T13:43:58.816Z"
+    },
+    {
+      "type": "question",
+      "round": 7,
+      "questionNumber": 10,
+      "at": "2026-06-27T13:43:58.818Z"
+    },
+    {
+      "type": "round_complete",
+      "round": 7,
+      "roundTitle": "Угадай место по фото",
+      "at": "2026-06-27T13:43:58.821Z"
+    },
+    {
+      "type": "question",
+      "round": 8,
+      "questionNumber": 2,
+      "at": "2026-06-27T13:43:58.866Z"
+    },
+    {
+      "type": "question",
+      "round": 8,
+      "questionNumber": 3,
+      "at": "2026-06-27T13:43:58.869Z"
+    },
+    {
+      "type": "question",
+      "round": 8,
+      "questionNumber": 4,
+      "at": "2026-06-27T13:43:58.871Z"
+    },
+    {
+      "type": "question",
+      "round": 8,
+      "questionNumber": 5,
+      "at": "2026-06-27T13:43:58.874Z"
+    },
+    {
+      "type": "question",
+      "round": 8,
+      "questionNumber": 6,
+      "at": "2026-06-27T13:43:58.876Z"
+    },
+    {
+      "type": "question",
+      "round": 8,
+      "questionNumber": 7,
+      "at": "2026-06-27T13:43:58.879Z"
+    },
+    {
+      "type": "question",
+      "round": 8,
+      "questionNumber": 8,
+      "at": "2026-06-27T13:43:58.882Z"
+    },
+    {
+      "type": "question",
+      "round": 8,
+      "questionNumber": 9,
+      "at": "2026-06-27T13:43:58.884Z"
+    },
+    {
+      "type": "question",
+      "round": 8,
+      "questionNumber": 10,
+      "at": "2026-06-27T13:43:58.886Z"
+    },
+    {
+      "type": "round_complete",
+      "round": 8,
+      "roundTitle": "Самая близкая цифра",
+      "at": "2026-06-27T13:43:58.889Z"
+    },
+    {
+      "type": "question",
+      "round": 9,
+      "questionNumber": 2,
+      "at": "2026-06-27T13:43:58.924Z"
+    },
+    {
+      "type": "question",
+      "round": 9,
+      "questionNumber": 3,
+      "at": "2026-06-27T13:43:58.927Z"
+    },
+    {
+      "type": "question",
+      "round": 9,
+      "questionNumber": 4,
+      "at": "2026-06-27T13:43:58.929Z"
+    },
+    {
+      "type": "question",
+      "round": 9,
+      "questionNumber": 5,
+      "at": "2026-06-27T13:43:58.932Z"
+    },
+    {
+      "type": "question",
+      "round": 9,
+      "questionNumber": 6,
+      "at": "2026-06-27T13:43:58.934Z"
+    },
+    {
+      "type": "question",
+      "round": 9,
+      "questionNumber": 7,
+      "at": "2026-06-27T13:43:58.936Z"
+    },
+    {
+      "type": "question",
+      "round": 9,
+      "questionNumber": 8,
+      "at": "2026-06-27T13:43:58.938Z"
+    },
+    {
+      "type": "question",
+      "round": 9,
+      "questionNumber": 9,
+      "at": "2026-06-27T13:43:58.940Z"
+    },
+    {
+      "type": "question",
+      "round": 9,
+      "questionNumber": 10,
+      "at": "2026-06-27T13:43:58.943Z"
+    },
+    {
+      "type": "round_complete",
+      "round": 9,
+      "roundTitle": "Что дороже?",
+      "at": "2026-06-27T13:43:58.945Z"
+    }
+  ],
+  "audioClips": {},
+  "scoreAtRoundStart": {
+    "41a209ee-39cc-482d-ade9-faee6940f829": 0,
+    "cc86c974-66bd-48d6-b00c-c4e6e40c3dc6": 0
+  },
+  "leaderboardStep": "total"
 }

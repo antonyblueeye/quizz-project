@@ -247,6 +247,21 @@ function buildAnswerBreakdown(sess, round, question) {
     return { type, ...buildSongBreakdown(players, question) };
   }
 
+  if (type === "reviewmatch") {
+    const places = round.places || [];
+    return {
+      type,
+      correctAnswer: question.answer,
+      optionPlayers: places.map((place) => ({
+        option: place,
+        isCorrect: normalize(place) === normalize(question.answer),
+        players: players
+          .filter((p) => normalize(String(p.answer ?? "")) === normalize(place))
+          .map((p) => playerChip(p.id, p)),
+      })),
+    };
+  }
+
   if (isChoiceType(type)) {
     return {
       type,

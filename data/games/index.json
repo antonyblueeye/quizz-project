@@ -1,5 +1,50 @@
 [
   {
+    "gameId": "a0cf7949",
+    "quizTemplateId": "quiz1",
+    "title": "сб, 27 июня 2026 г. в 16:44",
+    "createdAt": "2026-06-27T13:44:38.422Z",
+    "updatedAt": "2026-06-27T13:44:38.462Z",
+    "status": "active",
+    "playerCount": 1,
+    "started": true,
+    "phase": "match_reveal",
+    "currentRound": 10,
+    "currentRoundTitle": "Очень плохие отзывы",
+    "totalRounds": 10,
+    "progressLabel": "Раунд 10/10: Очень плохие отзывы · результаты ответа"
+  },
+  {
+    "gameId": "ac6b07d5",
+    "quizTemplateId": "quiz1",
+    "title": "сб, 27 июня 2026 г. в 16:43",
+    "createdAt": "2026-06-27T13:43:58.435Z",
+    "updatedAt": "2026-06-27T13:43:58.999Z",
+    "status": "active",
+    "playerCount": 2,
+    "started": true,
+    "phase": "match_reveal",
+    "currentRound": 10,
+    "currentRoundTitle": "Очень плохие отзывы",
+    "totalRounds": 10,
+    "progressLabel": "Раунд 10/10: Очень плохие отзывы · результаты ответа"
+  },
+  {
+    "gameId": "c50635fa",
+    "quizTemplateId": "quiz1",
+    "title": "сб, 27 июня 2026 г. в 02:57",
+    "createdAt": "2026-06-26T23:57:19.955Z",
+    "updatedAt": "2026-06-27T13:43:36.736Z",
+    "status": "active",
+    "playerCount": 1,
+    "started": true,
+    "phase": "question",
+    "currentRound": 1,
+    "currentRoundTitle": "Вопросы с вариантами ответов",
+    "totalRounds": 10,
+    "progressLabel": "Раунд 1/10: Вопросы с вариантами ответов · вопрос 2/10"
+  },
+  {
     "gameId": "4794fbcb",
     "quizTemplateId": "quiz1",
     "title": "сб, 27 июня 2026 г. в 10:37",
@@ -13,20 +58,5 @@
     "currentRoundTitle": "Вопросы с вариантами ответов",
     "totalRounds": 10,
     "progressLabel": "Раунд 1/10: Вопросы с вариантами ответов · разбор ответов"
-  },
-  {
-    "gameId": "c50635fa",
-    "quizTemplateId": "quiz1",
-    "title": "сб, 27 июня 2026 г. в 02:57",
-    "createdAt": "2026-06-26T23:57:19.955Z",
-    "updatedAt": "2026-06-27T07:29:13.454Z",
-    "status": "active",
-    "playerCount": 1,
-    "started": true,
-    "phase": "question",
-    "currentRound": 1,
-    "currentRoundTitle": "Вопросы с вариантами ответов",
-    "totalRounds": 10,
-    "progressLabel": "Раунд 1/10: Вопросы с вариантами ответов · вопрос 2/10"
   }
 ]

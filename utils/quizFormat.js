@@ -1,3 +1,4 @@
+const { formatReviewMatchPreview } = require("./reviewMatch");
 const {
   getSongTitlePoints,
   getSongArtistPoints,
@@ -149,35 +150,6 @@ function formatQuestion(round, question, questionIndex) {
   }
 
   return base;
-}
-
-function formatReviewMatchPreview(round, question, questionIndex) {
-  const places = (round.places || []).map((name) => ({
-    name,
-    used: false,
-    pickedBy: null,
-    correct: null,
-    wasCorrectAnswer: false,
-  }));
-
-  return {
-    type: "reviewmatch",
-    round: round.id,
-    roundTitle: round.title,
-    questionNumber: questionIndex + 1,
-    totalInRound: round.questions.length,
-    reviewNumber: questionIndex + 1,
-    totalReviews: round.questions.length,
-    text: "Сопоставьте отзыв с местом",
-    image: question.image ? imagePath(round, question.image) : null,
-    places,
-    availablePlaces: round.places || [],
-    activePlayer: null,
-    isYourTurn: false,
-    matchHistory: [],
-    previewMode: true,
-    scoringHint: `${round.matchPoints ?? 1} б. за верное сопоставление`,
-  };
 }
 
 function formatReviewQuestion(round, question, questionIndex, answerBreakdown) {

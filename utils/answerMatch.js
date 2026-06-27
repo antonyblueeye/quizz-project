@@ -218,6 +218,10 @@ function scoreSongAnswer(playerAnswer, question) {
 function isAnswerCorrect(playerAnswer, question, type) {
   if (playerAnswer == null || playerAnswer === "") return false;
 
+  if (type === "reviewmatch") {
+    return normalize(String(playerAnswer)) === normalize(question.answer);
+  }
+
   if (isChoiceType(type)) {
     return normalize(playerAnswer) === normalize(question.answer);
   }

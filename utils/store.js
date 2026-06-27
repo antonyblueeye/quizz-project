@@ -9,11 +9,9 @@ const {
 } = require("./answerMatch");
 const { getOrCreateAudioClip } = require("./audioClip");
 const {
-  initReviewMatch,
   formatReviewMatchQuestion,
-  formatReviewMatchSummary,
-  recordReviewMatchAnswer,
-  getActivePlayerId,
+  formatReviewMatchReveal,
+  isValidReviewMatchPlace,
 } = require("./reviewMatch");
 const {
   getQuestionPoints,
@@ -22,6 +20,7 @@ const {
   getCityPoints,
   getCountryPoints,
   getClosestPoints,
+  getMatchPoints,
   formatScore,
 } = require("./scoring");
 const { buildAnswerBreakdown } = require("./answerArchive");
@@ -94,10 +93,6 @@ function getReviewQuestion(sess) {
   const round = sess.rounds[sess.currentRoundIndex];
   if (!round) return null;
 
-  if (round.type === "reviewmatch") {
-    return formatReviewMatchSummary(sess, round);
-  }
-
   const question = round.questions[sess.reviewQuestionIndex];
   if (!question) return null;
   const key = `${sess.currentRoundIndex}-${sess.reviewQuestionIndex}`;
@@ -106,12 +101,18 @@ function getReviewQuestion(sess) {
   return attachSongAudioClip(sess, round, question, sess.reviewQuestionIndex, formatted);
 }
 
-function getCurrentQuestion(sess, viewerPlayerId = null) {
+function getMatchReveal(sess) {
+  const round = sess.rounds[sess.currentRoundIndex];
+  if (!round || round.type !== "reviewmatch") return null;
+  return formatReviewMatchReveal(sess, round, sess.currentQuestionIndex);
+}
+
+function getCurrentQuestion(sess) {
   const round = sess.rounds[sess.currentRoundIndex];
   if (!round) return null;
 
   if (round.type === "reviewmatch" && sess.phase === "question") {
-    return formatReviewMatchQuestion(sess, round, viewerPlayerId);
+    return formatReviewMatchQuestion(sess, round);
   }
 
   const question = round.questions[sess.currentQuestionIndex];
@@ -189,14 +190,33 @@ function scoreSongQuestion(sess, question) {
   });
 }
 
+function scoreReviewMatchQuestion(sess, question) {
+  const round = sess.rounds[sess.currentRoundIndex];
+  const points = getMatchPoints(round, question);
+
+  Object.values(sess.players).forEach((player) => {
+    if (playerHasAnswer(player.answer)) {
+      if (isAnswerCorrect(player.answer, question, "reviewmatch")) {
+        player.score += points;
+      }
+    }
+    player.answer = null;
+  });
+}
+
 function scoreCurrentQuestion(sess) {
   const round = sess.rounds[sess.currentRoundIndex];
-  if (!round || round.type === "reviewmatch") return;
+  if (!round) return;
   const questionIndex = sess.currentQuestionIndex;
   const question = round.questions[questionIndex];
   if (!question) return;
 
   archiveQuestionAnswers(sess, questionIndex);
+
+  if (round.type === "reviewmatch") {
+    scoreReviewMatchQuestion(sess, question);
+    return;
+  }
 
   if (round.type === "closest") {
     scoreClosestQuestion(sess, question);
@@ -253,20 +273,12 @@ function rejoinPlayer(gameId, playerId, socketId) {
 function getPlayers(gameId) {
   const sess = ensureGame(gameId);
   if (!sess) return [];
-  const round = sess.rounds[sess.currentRoundIndex];
-  const activePlayerId =
-    round?.type === "reviewmatch" && sess.phase === "question"
-      ? getActivePlayerId(sess)
-      : null;
 
   return Object.entries(sess.players).map(([id, p]) => ({
     id,
     name: p.name,
     avatar: p.avatar,
-    answered: activePlayerId
-      ? id !== activePlayerId
-      : playerHasAnswer(p.answer),
-    isActiveTurn: activePlayerId === id,
+    answered: playerHasAnswer(p.answer),
     online: Boolean(p.socketId),
   }));
 }
@@ -299,10 +311,35 @@ function advanceQuestion(gameId) {
     sess.phase = "question";
     sess.currentQuestionIndex = 0;
     snapshotRoundScores(sess);
+    persist(gameId);
+    return { finished: false, currentQuestion: getCurrentQuestion(sess) };
+  }
+
+  if (sess.phase === "match_reveal") {
     const round = sess.rounds[sess.currentRoundIndex];
-    if (round?.type === "reviewmatch") {
-      initReviewMatch(sess);
+    sess.currentQuestionIndex += 1;
+
+    if (sess.currentQuestionIndex >= round.questions.length) {
+      sess.phase = "round_complete";
+      sess.reviewQuestionIndex = 0;
+      persistence.appendHistory(sess, {
+        type: "round_complete",
+        round: round.id,
+        roundTitle: round.title,
+      });
+      persist(gameId);
+      return {
+        finished: false,
+        roundComplete: true,
+        round: round.id,
+        roundTitle: round.title,
+      };
     }
+
+    sess.phase = "question";
+    Object.values(sess.players).forEach((p) => {
+      p.answer = null;
+    });
     persist(gameId);
     return { finished: false, currentQuestion: getCurrentQuestion(sess) };
   }
@@ -334,20 +371,12 @@ function advanceQuestion(gameId) {
     sess.reviewQuestionIndex = 0;
     sess.roundAnswers = {};
     sess.audioClips = {};
-    sess.matchState = null;
     sess.phase = "round_intro";
     persist(gameId);
     return { finished: false, roundIntro: getRoundIntro(sess) };
   }
 
   if (sess.phase === "round_complete") {
-    sess.phase = "round_review";
-    sess.reviewQuestionIndex = 0;
-    persist(gameId);
-    return { reviewQuestion: getReviewQuestion(sess) };
-  }
-
-  if (sess.phase === "round_review") {
     const round = sess.rounds[sess.currentRoundIndex];
 
     if (round.type === "reviewmatch") {
@@ -359,6 +388,15 @@ function advanceQuestion(gameId) {
         roundLeaderboard: buildRoundLeaderboardPayload(sess, gameId),
       };
     }
+
+    sess.phase = "round_review";
+    sess.reviewQuestionIndex = 0;
+    persist(gameId);
+    return { reviewQuestion: getReviewQuestion(sess) };
+  }
+
+  if (sess.phase === "round_review") {
+    const round = sess.rounds[sess.currentRoundIndex];
 
     sess.reviewQuestionIndex += 1;
 
@@ -383,9 +421,15 @@ function advanceQuestion(gameId) {
   scoreCurrentQuestion(sess);
 
   const round = sess.rounds[sess.currentRoundIndex];
+
   if (round.type === "reviewmatch") {
+    sess.phase = "match_reveal";
     persist(gameId);
-    return { finished: false, currentQuestion: getCurrentQuestion(sess) };
+    const matchReveal = getMatchReveal(sess);
+    if (!matchReveal) {
+      return { error: "Не удалось показать результаты ответа." };
+    }
+    return { finished: false, matchReveal };
   }
 
   sess.currentQuestionIndex += 1;
@@ -416,39 +460,18 @@ function advanceQuestion(gameId) {
   return { finished: false, currentQuestion: getCurrentQuestion(sess) };
 }
 
-function recordMatchAnswer(gameId, playerId, place) {
-  const sess = ensureGame(gameId);
-  if (!sess) return null;
-  const result = recordReviewMatchAnswer(sess, playerId, place);
-  if (!result.ok) return result;
-  persist(gameId);
-
-  if (result.done) {
-    persistence.appendHistory(sess, {
-      type: "round_complete",
-      round: sess.rounds[sess.currentRoundIndex].id,
-      roundTitle: sess.rounds[sess.currentRoundIndex].title,
-    });
-    return {
-      ok: true,
-      roundComplete: result.roundComplete,
-      feedback: result.feedback,
-    };
-  }
-
-  return {
-    ok: true,
-    currentQuestion: getCurrentQuestion(sess),
-    feedback: result.feedback,
-  };
-}
-
 function recordAnswer(gameId, playerId, answer) {
   const sess = ensureGame(gameId);
   if (!sess || sess.phase !== "question") return null;
   const player = sess.players[playerId];
   if (!player) return null;
   if (playerHasAnswer(player.answer)) return false;
+
+  const round = sess.rounds[sess.currentRoundIndex];
+  if (round?.type === "reviewmatch" && !isValidReviewMatchPlace(round, answer)) {
+    return false;
+  }
+
   player.answer = answer;
   persist(gameId);
   return true;
@@ -539,6 +562,10 @@ function buildSessionSnapshot(sess, gameId) {
     snap.currentQuestion = getCurrentQuestion(sess);
   }
 
+  if (sess.phase === "match_reveal") {
+    snap.matchReveal = getMatchReveal(sess);
+  }
+
   if (sess.phase === "round_complete") {
     const round = sess.rounds[sess.currentRoundIndex];
     snap.roundComplete = {
@@ -575,13 +602,8 @@ function getPlayerSessionSnapshot(gameId, playerId) {
   const player = sess?.players[playerId];
   const round = sess?.rounds[sess.currentRoundIndex];
 
-  if (round?.type === "reviewmatch" && sess.phase === "question") {
-    snap.currentQuestion = getCurrentQuestion(sess, playerId);
-    snap.playerAnswered = getActivePlayerId(sess) !== playerId;
-  } else {
-    snap.playerAnswered =
-      playerHasAnswer(player?.answer) && sess.phase === "question";
-  }
+  snap.playerAnswered =
+    playerHasAnswer(player?.answer) && sess.phase === "question";
 
   snap.playerId = playerId;
   return snap;
@@ -614,7 +636,6 @@ module.exports = {
   startQuiz,
   advanceQuestion,
   recordAnswer,
-  recordMatchAnswer,
   recordAnswerBySocket,
   getLeaderboard,
   detachSocket,

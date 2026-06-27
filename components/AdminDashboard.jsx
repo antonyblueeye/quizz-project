@@ -3,6 +3,7 @@
 import React, { useEffect, useState, useCallback } from "react";
 import Link from "next/link";
 import { getSocket } from "../lib/socket";
+import { QUESTION_TIME_SECONDS } from "../lib/gameConfig";
 import { QRCodeCanvas } from "qrcode.react";
 import QuestionCard from "./QuestionCard";
 import Timer from "./Timer";
@@ -17,6 +18,7 @@ function applySessionSync(snap, setters) {
     setRoundIntro,
     setRoundComplete,
     setReviewQuestion,
+    setMatchReveal,
     setRoundLeaderboard,
     setFinalLeaderboard,
     setTimeLeft,
@@ -25,16 +27,24 @@ function applySessionSync(snap, setters) {
   setStarted(snap.started);
   setRoundComplete(null);
   setReviewQuestion(null);
+  setMatchReveal(null);
   setRoundIntro(null);
 
   if (snap.currentQuestion) {
     setQuestion(snap.currentQuestion);
     setRoundLeaderboard(null);
     setFinalLeaderboard(null);
-    setTimeLeft(60);
+    setTimeLeft(QUESTION_TIME_SECONDS);
   } else if (snap.roundIntro) {
     setQuestion(null);
     setRoundIntro(snap.roundIntro);
+    setRoundLeaderboard(null);
+    setFinalLeaderboard(null);
+    setTimeLeft(0);
+  } else if (snap.matchReveal) {
+    setQuestion(null);
+    setReviewQuestion(null);
+    setMatchReveal(snap.matchReveal);
     setRoundLeaderboard(null);
     setFinalLeaderboard(null);
     setTimeLeft(0);
@@ -74,6 +84,7 @@ export default function AdminDashboard({ gameId, quizTemplateId }) {
   const [question, setQuestion] = useState(null);
   const [roundComplete, setRoundComplete] = useState(null);
   const [reviewQuestion, setReviewQuestion] = useState(null);
+  const [matchReveal, setMatchReveal] = useState(null);
   const [roundIntro, setRoundIntro] = useState(null);
   const [started, setStarted] = useState(false);
   const [gameStatus, setGameStatus] = useState("lobby");
@@ -101,6 +112,7 @@ export default function AdminDashboard({ gameId, quizTemplateId }) {
     setRoundIntro,
     setRoundComplete,
     setReviewQuestion,
+    setMatchReveal,
     setRoundLeaderboard,
     setFinalLeaderboard,
     setTimeLeft,
@@ -114,6 +126,7 @@ export default function AdminDashboard({ gameId, quizTemplateId }) {
     setQuestion(null);
     setRoundComplete(null);
     setReviewQuestion(null);
+    setMatchReveal(null);
     setRoundLeaderboard(null);
     setFinalLeaderboard(null);
     setTimeLeft(0);
@@ -134,13 +147,15 @@ export default function AdminDashboard({ gameId, quizTemplateId }) {
       setRoundIntro(null);
       setRoundComplete(null);
       setReviewQuestion(null);
+      setMatchReveal(null);
       setRoundLeaderboard(null);
       setQuestion(q);
-      setTimeLeft(60);
+      setTimeLeft(QUESTION_TIME_SECONDS);
     };
     const onRoundComplete = (payload) => {
       setQuestion(null);
       setReviewQuestion(null);
+      setMatchReveal(null);
       setRoundLeaderboard(null);
       setTimeLeft(0);
       setRoundComplete(payload);
@@ -153,11 +168,21 @@ export default function AdminDashboard({ gameId, quizTemplateId }) {
       setTimeLeft(0);
       setReviewQuestion(q);
     };
+    const onMatchReveal = (payload) => {
+      setNextPending(false);
+      setQuestion(null);
+      setRoundComplete(null);
+      setReviewQuestion(null);
+      setMatchReveal(payload);
+      setRoundLeaderboard(null);
+      setTimeLeft(0);
+    };
     const onRoundLeaderboard = (payload) => {
       setQuestion(null);
       setRoundIntro(null);
       setRoundComplete(null);
       setReviewQuestion(null);
+      setMatchReveal(null);
       setTimeLeft(0);
       setRoundLeaderboard(payload);
     };
@@ -195,6 +220,7 @@ export default function AdminDashboard({ gameId, quizTemplateId }) {
     socket.on("question", onQuestion);
     socket.on("roundComplete", onRoundComplete);
     socket.on("answerReview", onAnswerReview);
+    socket.on("matchReveal", onMatchReveal);
     socket.on("roundLeaderboard", onRoundLeaderboard);
     socket.on("quizFinished", onQuizFinished);
     if (socket.connected) initAdmin();
@@ -210,6 +236,7 @@ export default function AdminDashboard({ gameId, quizTemplateId }) {
       socket.off("question", onQuestion);
       socket.off("roundComplete", onRoundComplete);
       socket.off("answerReview", onAnswerReview);
+      socket.off("matchReveal", onMatchReveal);
       socket.off("roundLeaderboard", onRoundLeaderboard);
       socket.off("quizFinished", onQuizFinished);
     };
@@ -241,7 +268,7 @@ export default function AdminDashboard({ gameId, quizTemplateId }) {
       setAdminError("Нет связи с сервером. Подождите переподключения или обновите страницу.");
       return;
     }
-    if (question) setTimeLeft(60);
+    if (question) setTimeLeft(QUESTION_TIME_SECONDS);
     setNextPending(true);
     setAdminError("");
     socket.emit("nextQuestion", { gameId }, (result) => {
@@ -266,6 +293,10 @@ export default function AdminDashboard({ gameId, quizTemplateId }) {
 
   const nextButtonLabel = nextPending
     ? "Ждём…"
+    : matchReveal
+    ? matchReveal.questionNumber >= matchReveal.totalInRound
+      ? "Завершить раунд"
+      : "Следующий отзыв"
     : roundIntro
     ? "Начать раунд"
     : roundLeaderboard
@@ -282,9 +313,9 @@ export default function AdminDashboard({ gameId, quizTemplateId }) {
           : "Следующий ответ"
       : roundComplete
         ? "Перейти к ответам"
-        : "Следующий вопрос";
-
-  const isReviewMatchActive = question?.type === "reviewmatch";
+        : question?.type === "reviewmatch"
+          ? "Показать ответы"
+          : "Следующий вопрос";
 
   return (
     <main className="quiz-admin-page">
@@ -392,19 +423,32 @@ export default function AdminDashboard({ gameId, quizTemplateId }) {
         {question && (
           <section className="quiz-game-section">
             <h2 className="quiz-section-title">{question.roundTitle}</h2>
-            {isReviewMatchActive ? (
-              <ReviewMatchPanel data={question} disabled showMeta={false} />
+            {question.type === "reviewmatch" ? (
+              <>
+                <Timer seconds={timeLeft} total={QUESTION_TIME_SECONDS} />
+                <ReviewMatchPanel data={question} disabled showMeta={false} />
+              </>
             ) : (
               <>
-                <Timer seconds={timeLeft} total={60} />
+                <Timer seconds={timeLeft} total={QUESTION_TIME_SECONDS} />
                 <QuestionCard question={question} onSubmit={() => {}} disabled />
               </>
             )}
-            {!isReviewMatchActive && (
-              <button type="button" className="button quiz-next-btn" onClick={handleNext} disabled={nextPending}>
-                {nextButtonLabel}
-              </button>
-            )}
+            <button type="button" className="button quiz-next-btn" onClick={handleNext} disabled={nextPending}>
+              {nextButtonLabel}
+            </button>
+          </section>
+        )}
+
+        {matchReveal && (
+          <section className="quiz-game-section quiz-review-section">
+            <h2 className="quiz-section-title">
+              Результаты · {matchReveal.roundTitle} · отзыв {matchReveal.questionNumber}/{matchReveal.totalInRound}
+            </h2>
+            <ReviewMatchPanel data={matchReveal} disabled showMeta={false} />
+            <button type="button" className="button quiz-next-btn" onClick={handleNext} disabled={nextPending}>
+              {nextButtonLabel}
+            </button>
           </section>
         )}
 
@@ -413,7 +457,7 @@ export default function AdminDashboard({ gameId, quizTemplateId }) {
             <h2 className="round-complete-title">Раунд {roundComplete.round} завершён</h2>
             <p className="round-complete-subtitle">{roundComplete.roundTitle}</p>
             <button type="button" className="button quiz-next-btn" onClick={handleNext} disabled={nextPending}>
-              Перейти к ответам
+              {roundComplete.round === 10 ? "Показать рейтинг" : "Перейти к ответам"}
             </button>
           </section>
         )}

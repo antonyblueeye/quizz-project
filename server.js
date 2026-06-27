@@ -120,22 +120,6 @@ app.prepare().then(() => {
     });
 
     socket.on("submitAnswer", ({ gameId, playerId, answer }) => {
-      const sess = store.ensureGame(gameId);
-      const round = sess?.rounds[sess.currentRoundIndex];
-
-      if (round?.type === "reviewmatch" && sess?.phase === "question") {
-        const result = store.recordMatchAnswer(gameId, playerId, answer);
-        if (result?.ok) {
-          io.to(gameId).emit("playersUpdate", store.getPlayers(gameId));
-          if (result.roundComplete) {
-            io.to(gameId).emit("roundComplete", result.roundComplete);
-          } else if (result.currentQuestion) {
-            io.to(gameId).emit("question", result.currentQuestion);
-          }
-        }
-        return;
-      }
-
       let ok = store.recordAnswer(gameId, playerId, answer);
       if (!ok) {
         ok = store.recordAnswerBySocket(gameId, socket.id, answer);
@@ -176,6 +160,13 @@ app.prepare().then(() => {
 
       if (result.reviewQuestion) {
         io.to(gameId).emit("answerReview", result.reviewQuestion);
+        if (typeof cb === "function") cb(result);
+        return;
+      }
+
+      if (result.matchReveal) {
+        io.to(gameId).emit("playersUpdate", store.getPlayers(gameId));
+        io.to(gameId).emit("matchReveal", result.matchReveal);
         if (typeof cb === "function") cb(result);
         return;
       }
